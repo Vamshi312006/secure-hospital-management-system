@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Prescriptions{% endblock %}
+
+{% block content %}
+<section style="padding:4rem 5%;">
+  <h2 class="services-title">Prescriptions</h2>
+
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="card" style="padding:1rem;">
+      {% for p in prescriptions %}
+        <div style="border-bottom:1px solid #eee;padding:0.8rem 0;">
+          <strong>ID:</strong> {{ p[0] }} <br>
+          <strong>Doctor:</strong> {{ p[1] }} <br>
+          <strong>Date:</strong> {{ p[2] }} <br>
+          <strong>Notes:</strong> {{ p[3] }}
+        </div>
+      {% else %}
+        <p style="padding:1rem;">No prescriptions found.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

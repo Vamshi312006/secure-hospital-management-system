@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Hospital Management System{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>
+      <a href="{{ url_for('home') }}" class="site-title">Hospital Management System</a>
+    </h1>
+
+    <div class="header-right">
+
+      <!-- Doctor Search -->
+      {% if session.get('user_id') %}
+      <form action="{{ url_for('doctors') }}" method="get" class="search-bar">
+        <input type="search" name="q" placeholder="Search doctors..." />
+      </form>
+      {% endif %}
+
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('home') }}"><button class="nav-btn">Home</button></a>
+        <a href="{{ url_for('dashboard') }}"><button class="nav-btn">Dashboard</button></a>
+        <a href="{{ url_for('logout') }}"><button class="nav-btn logout">Logout</button></a>
+      {% else %}
+        <a href="{{ url_for('home') }}"><button class="nav-btn">Home</button></a>
+        <a href="{{ url_for('home') }}#login"><button class="nav-btn">Login</button></a>
+      {% endif %}
+
+    </div>
+  </header>
+
+  <!-- HERO SECTION (only before login) -->
+  {% if not session.get('user_id') %}
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <a href="#login" class="hero-login-btn">Login</a>
+  </section>
+  {% endif %}
+
+  <!-- LOGIN MODAL -->
+  <section id="login" class="login-modal">
+    <div class="login-card">
+
+      <a href="#" class="close-btn">&times;</a>
+
+      <h2>Login</h2>
+      <p>Access your account</p>
+
+      <form action="{{ url_for('login') }}" method="POST">
+        <label>Email</label>
+        <input type="email" name="username" placeholder="Enter your email" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit" class="submit-btn">Login</button>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- CONTACT FOOTER (ALWAYS visible) -->
+  <section id="contact" class="contact-section">
+    <h2>Contact Us</h2>
+    <div class="branches">
+      <p>Main Branch: +91 98765 43210</p>
+      <p>Kochi Branch: +91 92345 67890</p>
+      <p>Bangalore Branch: +91 93456 78901</p>
+      <p>Chennai Branch: +91 94567 89012</p>
+    </div>
+  </section>
+
+</body>
+</html>

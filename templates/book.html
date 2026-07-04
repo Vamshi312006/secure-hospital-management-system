@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment{% endblock %}
+
+{% block content %}
+<section style="padding:4rem 5%;">
+  <h2 class="services-title">Book Appointment</h2>
+
+  <div style="max-width:700px;margin:0 auto;">
+    <form action="{{ url_for('book') }}" method="post" class="card" style="padding:1.2rem;">
+      <label for="doctor">Choose Doctor</label>
+      <select name="doctor_id" id="doctor" required style="padding:0.6rem;border-radius:8px;margin-bottom:0.8rem;">
+        <option value="">-- Select Doctor --</option>
+        {% for d in doctors %}
+          <option value="{{ d[0] }}">{{ d[1] }} — {{ d[2] }}</option>
+        {% else %}
+          <option disabled>No doctors found</option>
+        {% endfor %}
+      </select>
+
+      <label for="date">Date</label>
+      <input type="date" name="date" id="date" required>
+
+      <label for="time">Time</label>
+      <input type="time" name="time" id="time" required>
+
+      <button type="submit" class="submit-btn" style="margin-top:1rem;">Book Appointment</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

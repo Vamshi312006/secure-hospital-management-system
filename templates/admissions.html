@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Admissions{% endblock %}
+
+{% block content %}
+<section style="padding:4rem 5%;">
+  <h2 class="services-title">Admissions</h2>
+
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="card" style="padding:1rem;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="text-align:left;"><th>Admission ID</th><th>Room</th><th>Admit</th><th>Discharge</th><th>Total Bill</th></tr>
+        </thead>
+        <tbody>
+          {% for a in admissions %}
+          <tr style="border-top:1px solid #eee;">
+            <td>{{ a[0] }}</td>
+            <td>{{ a[3] }}</td>
+            <td>{{ a[4] }}</td>
+            <td>{{ a[5] }}</td>
+            <td>₹{{ a[6] }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" style="padding:1rem;">No admissions found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

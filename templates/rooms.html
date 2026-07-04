@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Rooms{% endblock %}
+
+{% block content %}
+<section style="padding:4rem 5%;">
+  <h2 class="services-title">Room Details</h2>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Room ID</th>
+          <th>Type</th>
+          <th>Price/day</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for r in rooms %}
+        <tr>
+          <td>{{ r[0] }}</td>
+          <td>{{ r[1] }}</td>
+          <td>₹{{ '%.2f'|format(r[2]) }}</td>
+          <td>{{ r[3] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</section>
+{% endblock %}

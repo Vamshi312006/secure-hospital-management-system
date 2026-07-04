@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<section style="padding:4rem 5%;">
+  <h2 class="services-title">Update Profile</h2>
+
+  <div style="max-width:700px;margin:0 auto;">
+    <form class="card" style="padding:1rem;" action="{{ url_for('patient_profile') }}" method="post">
+      <label>Name</label>
+      <input type="text" name="name" value="{{ patient.name if patient else '' }}">
+
+      <label>Phone</label>
+      <input type="text" name="phone" value="{{ patient.phone if patient else '' }}">
+
+      <label>Email</label>
+      <input type="email" name="email" value="{{ patient.email if patient else '' }}">
+
+      <label>Address</label>
+      <input type="text" name="address" value="{{ patient.address if patient else '' }}">
+
+      <button class="submit-btn" type="submit" style="margin-top:1rem;">Save Profile</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

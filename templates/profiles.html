@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Doctor Profiles{% endblock %}
+
+{% block content %}
+
+<a href="{{ url_for('home') }}" class="small-home-btn">← Home</a>
+
+<section class="page-section">
+  <h2 class="services-title">Doctor Profiles</h2>
+
+  <div class="services-grid doctors-grid">
+    {% for d in doctors %}
+      <div class="card doctor-card">
+        <img src="{{ url_for('static', filename='images/doctor.jpg') }}" alt="Doctor">
+        
+        <h3>{{ d[1] }}</h3>
+
+        <div class="doctor-info">
+          <p><strong>Specialization:</strong> {{ d[2] }}</p>
+          <p><strong>Qualification:</strong> {{ d[5] }}</p>
+          <p><strong>Experience:</strong> {{ d[6] }} years</p>
+          <p><strong>Phone:</strong> {{ d[3] }}</p>
+          <p><strong>Email:</strong> {{ d[4] }}</p>
+        </div>
+      </div>
+    {% else %}
+      <p>No doctors available.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

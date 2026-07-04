@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Billing{% endblock %}
+
+{% block content %}
+<section style="padding:4rem 5%;">
+  <h2 class="services-title">Billing & Payments</h2>
+
+  <div style="max-width:1000px;margin:0 auto;">
+    <div class="card" style="padding:1rem;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="text-align:left;"><th>Bill ID</th><th>Appointment</th><th>Total</th><th>Discount</th><th>Net</th><th>Date</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for b in bills %}
+          <tr style="border-top:1px solid #eee;">
+            <td>{{ b[0] }}</td>
+            <td>{{ b[2] or 'N/A' }}</td>
+            <td>₹{{ b[3] }}</td>
+            <td>₹{{ b[4] }}</td>
+            <td>₹{{ b[5] }}</td>
+            <td>{{ b[6] }}</td>
+            <td>{{ b[7] }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="7" style="padding:1rem;">No bills found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

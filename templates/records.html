@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Medical Records{% endblock %}
+
+{% block content %}
+<section style="padding:4rem 5%;">
+  <h2 class="services-title">My Medical Records</h2>
+
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="card" style="padding:1rem;">
+      {% for r in records %}
+        <div style="border-bottom:1px solid #eee;padding:0.8rem 0;">
+          <strong>Date:</strong> {{ r[6] or r[5] }} <br>
+          <strong>Doctor:</strong> {{ r[2] }} <br>
+          <strong>Diagnosis:</strong> {{ r[3] }} <br>
+          <strong>Notes:</strong> {{ r[4] }}
+        </div>
+      {% else %}
+        <p style="padding:1rem;">No medical records found.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
