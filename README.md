@@ -2,6 +2,10 @@
 
 A security-focused Hospital Management System built with Flask and MySQL. This is Version 0.1 and will evolve into an application security showcase featuring secure authentication, RBAC, audit logging, and secure deployment.
 
+## Live Demo
+
+[https://secure-hospital-management-system.onrender.com](https://secure-hospital-management-system.onrender.com)
+
 ## Features
 
 - Patient login and dashboard
@@ -21,14 +25,14 @@ A security-focused Hospital Management System built with Flask and MySQL. This i
 
 ```text
 .
-├── app.py
-├── database.py
-├── requirements.txt
-├── render.yaml
-├── static/
-│   ├── images/
-│   └── style.css
-└── templates/
+|-- app.py
+|-- database.py
+|-- requirements.txt
+|-- render.yaml
+|-- static/
+|   |-- images/
+|   `-- style.css
+`-- templates/
 ```
 
 ## Local Setup
