@@ -5,3 +5,8 @@ from .user import User
 from .session import Session
 from .login_attempt import LoginAttempt
 from .audit_log import AuditLog
+
+from .department import Department
+from .doctor import Doctor
+from .patient import Patient
+from .appointment import Appointment
