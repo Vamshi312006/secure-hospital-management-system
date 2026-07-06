@@ -31,3 +31,7 @@ Thumbs.db
 # Local reports and presentation artifacts
 *.pdf
 *.pptx
+venv/
+__pycache__/
+*.pyc
+.env
