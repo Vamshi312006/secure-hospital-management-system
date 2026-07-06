@@ -12,7 +12,7 @@
   <!-- HEADER -->
   <header>
     <h1>
-      <a href="{{ url_for('home') }}" class="site-title">Hospital Management System</a>
+      <a href="{{ url_for('home.home') }}" class="site-title">Hospital Management System</a>
     </h1>
 
     <div class="header-right">
@@ -25,12 +25,12 @@
       {% endif %}
 
       {% if session.get('user_id') %}
-        <a href="{{ url_for('home') }}"><button class="nav-btn">Home</button></a>
+        <a href="{{ url_for('home.home') }}"><button class="nav-btn">Home</button></a>
         <a href="{{ url_for('dashboard') }}"><button class="nav-btn">Dashboard</button></a>
-        <a href="{{ url_for('logout') }}"><button class="nav-btn logout">Logout</button></a>
+        <a href="{{ url_for('auth.logout') }}"><button class="nav-btn logout">Logout</button></a>
       {% else %}
-        <a href="{{ url_for('home') }}"><button class="nav-btn">Home</button></a>
-        <a href="{{ url_for('home') }}#login"><button class="nav-btn">Login</button></a>
+        <a href="{{ url_for('home.home') }}"><button class="nav-btn">Home</button></a>
+        <a href="{{ url_for('home.home') }}#login"><button class="nav-btn">Login</button></a>
       {% endif %}
 
     </div>
@@ -53,9 +53,9 @@
       <h2>Login</h2>
       <p>Access your account</p>
 
-      <form action="{{ url_for('login') }}" method="POST">
-        <label>Email</label>
-        <input type="email" name="username" placeholder="Enter your email" required>
+      <form action="{{ url_for('auth.login') }}" method="POST">
+        <label>Username or Email</label>
+        <input type="text" name="username" placeholder="Username or Email" required>
 
         <label>Password</label>
         <input type="password" name="password" placeholder="Enter your password" required>

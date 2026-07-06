@@ -1,50 +1,66 @@
+from functools import wraps
+from datetime import datetime
 
-# -------------------- Helpers --------------------
+from flask import (
+    Blueprint,
+    flash,
+    redirect,
+    request,
+    session,
+    url_for,
+)
+
+from app.extensions import db
+from app.services.auth_service import authenticate
+
+auth_bp = Blueprint("auth", __name__)
+
+
 def login_required(f):
     @wraps(f)
-    def wrapped(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         if "user_id" not in session:
             flash("Please login first.")
-            return redirect(url_for("home") + "#login")
+            return redirect(url_for("home.home") + "#login")
         return f(*args, **kwargs)
-    return wrapped
+
+    return wrapper
 
 
-# -------------------- LOGIN --------------------
-@app.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/login", methods=["POST"])
 def login():
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
 
-        if not username or not password:
-            flash("Missing username or password.")
-            return redirect(url_for("home") + "#login")
+    username = request.form.get("username")
+    password = request.form.get("password")
 
-        db = get_db()
-        cur = db.cursor()
+    if not username or not password:
+        flash("Username and password are required.")
+        return redirect(url_for("home.home") + "#login")
 
-        cur.execute(
-            "SELECT user_id, role FROM users WHERE username=%s AND password=%s",
-            (username, password)
-        )
-        user = cur.fetchone()
+    user = authenticate(username, password)
 
-        if user:
-            session["user_id"] = user[0]
-            session["role"] = user[1]
-            flash("Logged in successfully.")
-            return redirect(url_for("home"))
-        else:
-            flash("Invalid credentials.")
-            return redirect(url_for("home") + "#login")
+    if user is None:
+        flash("Invalid username or password.")
+        return redirect(url_for("home.home") + "#login")
 
-    return redirect(url_for("home") + "#login")
+    user.last_login = datetime.utcnow()
+    db.session.commit()
 
-
-# -------------------- LOGOUT --------------------
-@app.route("/logout")
-def logout():
     session.clear()
-    flash("You have logged out.")
-    return redirect(url_for("home"))
+    session["user_id"] = user.id
+    session["username"] = user.username
+    session["role"] = user.role.name
+
+    flash("Login successful.")
+
+    return redirect("/dashboard")
+
+
+@auth_bp.route("/logout")
+def logout():
+
+    session.clear()
+
+    flash("Logged out successfully.")
+
+    return redirect(url_for("home.home"))
