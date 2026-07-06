@@ -10,3 +10,8 @@ from .department import Department
 from .doctor import Doctor
 from .patient import Patient
 from .appointment import Appointment
+
+from .patient_record import PatientRecord
+from .medicine import Medicine
+from .prescription import Prescription
+from .prescription_item import PrescriptionItem
