@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section id="dashboard" style="padding:4rem 5%;">
+  <h2 class="services-title">Dashboard</h2>
+
+  <div style="max-width:1100px;margin:0 auto;display:flex;gap:1.2rem;flex-wrap:wrap;">
+    <div class="card" style="max-width:320px;">
+      <h3>Upcoming Appointments</h3>
+      <ul style="list-style:none;padding:0 1rem;">
+        {% for a in appointments[:6] %}
+          <li style="padding:0.4rem 0;border-bottom:1px solid #eee;">
+            {{ a[0] }} — {{ a[3] }} {{ a[4] }} ({{ a[5] }})
+          </li>
+        {% else %}
+          <li style="padding:0.8rem 0;">No upcoming appointments</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card" style="max-width:320px;">
+      <h3>Recent Bills</h3>
+      <ul style="list-style:none;padding:0 1rem;">
+        {% for b in bills[:6] %}
+          <li style="padding:0.4rem 0;border-bottom:1px solid #eee;">
+            Bill #{{ b[0] }} — ₹{{ b[3] }} — {{ b[6] }}
+          </li>
+        {% else %}
+          <li style="padding:0.8rem 0;">No bills found</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card" style="max-width:320px;">
+      <h3>My Prescriptions</h3>
+      <ul style="list-style:none;padding:0 1rem;">
+        {% for p in prescriptions[:6] %}
+          <li style="padding:0.4rem 0;border-bottom:1px solid #eee;">
+            Rx #{{ p[0] }} — {{ p[2] }}
+          </li>
+        {% else %}
+          <li style="padding:0.8rem 0;">No prescriptions</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+{% endblock %}

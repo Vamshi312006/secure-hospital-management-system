@@ -1,21 +1,10 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, redirect, session
 
 home_bp = Blueprint("home", __name__)
 
 
 @home_bp.route("/")
 def home():
-    if "user_id" not in session:
-        return render_template("index.html", show_login=True)
-
-    return render_template("index.html")
-
-
-@home_bp.route("/index")
-def index():
-    return home()
-
-
-@home_bp.route("/dashboard")
-def dashboard():
-    return "<h1>Dashboard Working ✅</h1>"
+    if session.get("user_id"):
+        return redirect("/dashboard")
+    return redirect("/login")

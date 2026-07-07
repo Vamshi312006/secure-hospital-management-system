@@ -4,10 +4,16 @@ from app.config import Config
 from app.extensions import db, migrate
 from app.models import *
 
-from app.routes import home_bp, auth_bp
+from app.routes import (
+    home_bp,
+    auth_bp,
+    dashboard_bp,
+    dev_bp,
+)
 
 
 def create_app():
+
     app = Flask(
         __name__,
         template_folder="../templates",
@@ -21,5 +27,7 @@ def create_app():
 
     app.register_blueprint(home_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(dashboard_bp)
+    app.register_blueprint(dev_bp)
 
     return app

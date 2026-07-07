@@ -1,0 +1,172 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+
+            Home /
+            <strong>Dashboard</strong>
+
+        </span>
+
+        <h1>
+            Dashboard
+        </h1>
+
+        <p>
+            Secure Healthcare Platform overview.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <button class="btn btn-primary">
+    <i data-lucide="plus"></i>
+    <span>New Patient</span>
+</button>
+
+    </div>
+
+</div>
+
+
+<section class="dashboard-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <div class="stat-icon">
+                <i data-lucide="users"></i>
+            </div>
+
+            <span class="badge badge-success">
+                +0
+            </span>
+
+        </div>
+
+        <h3>Total Patients</h3>
+
+        <span>0</span>
+
+        <small>No new patients today</small>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <div class="stat-icon">
+                <i data-lucide="calendar-days"></i>
+            </div>
+
+            <span class="badge badge-primary">
+                Today
+            </span>
+
+        </div>
+
+        <h3>Appointments</h3>
+
+        <span>0</span>
+
+        <small>Scheduled today</small>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <div class="stat-icon">
+                <i data-lucide="monitor-check"></i>
+            </div>
+
+            <span class="badge badge-success">
+                Live
+            </span>
+
+        </div>
+
+        <h3>Active Sessions</h3>
+
+        <span>1</span>
+
+        <small>Current authenticated users</small>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <div class="stat-icon">
+                <i data-lucide="shield-alert"></i>
+            </div>
+
+            <span class="badge badge-danger">
+                Safe
+            </span>
+
+        </div>
+
+        <h3>Security Alerts</h3>
+
+        <span>0</span>
+
+        <small>No incidents detected</small>
+
+    </div>
+
+</section>
+
+
+
+<section class="dashboard-panels">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h2>Recent Activity</h2>
+
+        </div>
+
+        <div class="panel-body">
+
+            No recent activity.
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h2>Security Status</h2>
+
+        </div>
+
+        <div class="panel-body">
+
+            ✔ System Healthy
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+UI Playground
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Form Components</h1>
+
+        <p>Reusable UI Components</p>
+
+    </div>
+
+</div>
+
+<form class="form">
+
+    <div class="form-row">
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                First Name
+
+            </label>
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="John"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                Last Name
+
+            </label>
+
+            <input
+                class="form-control"
+                type="text"
+                placeholder="Doe"
+            >
+
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">
+
+            Department
+
+        </label>
+
+        <select class="form-control">
+
+            <option>Cardiology</option>
+
+            <option>Neurology</option>
+
+            <option>Emergency</option>
+
+        </select>
+
+    </div>
+
+    <div class="form-group">
+
+        <label class="form-label">
+
+            Notes
+
+        </label>
+
+        <textarea
+            class="form-control"
+        ></textarea>
+
+    </div>
+
+    <button class="btn btn-primary">
+
+        Save
+
+    </button>
+
+</form>
+
+{% endblock %}

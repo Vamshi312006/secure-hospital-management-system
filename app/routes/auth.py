@@ -5,6 +5,7 @@ from flask import (
     Blueprint,
     flash,
     redirect,
+    render_template,
     request,
     session,
     url_for,
@@ -20,11 +21,14 @@ def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         if "user_id" not in session:
-            flash("Please login first.")
-            return redirect(url_for("home.home") + "#login")
+            return redirect(url_for("auth.login_page"))
         return f(*args, **kwargs)
-
     return wrapper
+
+
+@auth_bp.route("/login", methods=["GET"])
+def login_page():
+    return render_template("auth/login.html")
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -35,25 +39,26 @@ def login():
 
     if not username or not password:
         flash("Username and password are required.")
-        return redirect(url_for("home.home") + "#login")
+        return redirect(url_for("auth.login_page"))
 
     user = authenticate(username, password)
 
     if user is None:
         flash("Invalid username or password.")
-        return redirect(url_for("home.home") + "#login")
+        return redirect(url_for("auth.login_page"))
 
     user.last_login = datetime.utcnow()
     db.session.commit()
 
     session.clear()
+
     session["user_id"] = user.id
     session["username"] = user.username
     session["role"] = user.role.name
 
     flash("Login successful.")
 
-    return redirect("/dashboard")
+    return redirect(url_for("dashboard.dashboard"))
 
 
 @auth_bp.route("/logout")
@@ -63,4 +68,4 @@ def logout():
 
     flash("Logged out successfully.")
 
-    return redirect(url_for("home.home"))
+    return redirect(url_for("auth.login_page"))

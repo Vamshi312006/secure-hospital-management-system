@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            Secure Healthcare Platform
+        {% endblock %}
+    </title>
+
+    <!-- =======================================================
+         Google Fonts
+    ======================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =======================================================
+         CSS
+    ======================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/variables.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/base.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/layout.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/components.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/utilities.css') }}"
+    >
+
+    {% block page_css %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ===========================
+         Navbar
+    ============================ -->
+
+    {% include "partials/_navbar.html" %}
+
+    <!-- ===========================
+         Sidebar
+    ============================ -->
+
+    {% include "partials/_sidebar.html" %}
+
+    <!-- ===========================
+         Main Content
+    ============================ -->
+
+    <main class="content">
+
+        <div class="content-wrapper">
+
+            {% include "partials/_flash.html" %}
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+    </main>
+
+    <!-- ===========================
+         Footer
+    ============================ -->
+
+    {% include "partials/_footer.html" %}
+
+</div>
+
+<!-- =======================================================
+     Third-Party Libraries
+======================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- =======================================================
+     Application Scripts
+======================================================== -->
+
+<script
+    src="{{ url_for('static', filename='js/layout.js') }}"
+></script>
+
+<script
+    src="{{ url_for('static', filename='js/utils.js') }}"
+></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    lucide.createIcons();
+});
+</script>
+
+{% block page_js %}
+{% endblock %}
+
+</body>
+
+</html>
