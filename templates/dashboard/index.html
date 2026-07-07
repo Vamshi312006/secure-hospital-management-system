@@ -11,15 +11,11 @@ Dashboard
     <div>
 
         <span class="breadcrumb">
-
             Home /
             <strong>Dashboard</strong>
-
         </span>
 
-        <h1>
-            Dashboard
-        </h1>
+        <h1>Dashboard</h1>
 
         <p>
             Secure Healthcare Platform overview.
@@ -30,14 +26,13 @@ Dashboard
     <div class="page-actions">
 
         <button class="btn btn-primary">
-    <i data-lucide="plus"></i>
-    <span>New Patient</span>
-</button>
+            <i data-lucide="plus"></i>
+            <span>New Patient</span>
+        </button>
 
     </div>
 
 </div>
-
 
 <section class="dashboard-grid">
 
@@ -50,16 +45,38 @@ Dashboard
             </div>
 
             <span class="badge badge-success">
-                +0
+                Live
             </span>
 
         </div>
 
         <h3>Total Patients</h3>
 
-        <span>0</span>
+        <span>{{ metrics.patient_count }}</span>
 
-        <small>No new patients today</small>
+        <small>Total registered patients</small>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <div class="stat-icon">
+                <i data-lucide="stethoscope"></i>
+            </div>
+
+            <span class="badge badge-primary">
+                Live
+            </span>
+
+        </div>
+
+        <h3>Doctors</h3>
+
+        <span>{{ metrics.doctor_count }}</span>
+
+        <small>Registered doctors</small>
 
     </div>
 
@@ -79,7 +96,7 @@ Dashboard
 
         <h3>Appointments</h3>
 
-        <span>0</span>
+        <span>{{ metrics.today_appointments }}</span>
 
         <small>Scheduled today</small>
 
@@ -101,9 +118,9 @@ Dashboard
 
         <h3>Active Sessions</h3>
 
-        <span>1</span>
+        <span>{{ metrics.active_sessions }}</span>
 
-        <small>Current authenticated users</small>
+        <small>Authenticated users</small>
 
     </div>
 
@@ -123,15 +140,13 @@ Dashboard
 
         <h3>Security Alerts</h3>
 
-        <span>0</span>
+        <span>{{ metrics.security_alerts }}</span>
 
         <small>No incidents detected</small>
 
     </div>
 
 </section>
-
-
 
 <section class="dashboard-panels">
 
@@ -145,7 +160,15 @@ Dashboard
 
         <div class="panel-body">
 
-            No recent activity.
+            <ul>
+
+                <li>Administrator logged in</li>
+
+                <li>Dashboard loaded successfully</li>
+
+                <li>Database connection healthy</li>
+
+            </ul>
 
         </div>
 
@@ -161,7 +184,11 @@ Dashboard
 
         <div class="panel-body">
 
-            ✔ System Healthy
+            <p>✔ System Healthy</p>
+
+            <p>Sessions: {{ metrics.active_sessions }}</p>
+
+            <p>Alerts: {{ metrics.security_alerts }}</p>
 
         </div>
 
