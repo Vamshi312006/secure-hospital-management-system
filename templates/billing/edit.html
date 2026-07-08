@@ -1,0 +1,36 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Edit Invoice{% endblock %}
+
+{% block content %}
+
+<h1>Edit Invoice</h1>
+
+<form method="POST">
+
+    <label>Discount</label>
+    <input
+        type="number"
+        name="discount"
+        value="{{ invoice.discount }}"
+        step="0.01"
+    >
+
+    <label>Tax</label>
+    <input
+        type="number"
+        name="tax"
+        value="{{ invoice.tax }}"
+        step="0.01"
+    >
+
+    <label>Notes</label>
+    <textarea name="notes">{{ invoice.notes }}</textarea>
+
+    <button type="submit">
+        Save Changes
+    </button>
+
+</form>
+
+{% endblock %}

@@ -6,7 +6,50 @@
 
 <div class="page-header">
 
-    <h1>Invoices</h1>
+    <div>
+
+        <h1 class="page-title">
+            Billing
+        </h1>
+
+        <p class="page-subtitle">
+            Manage invoices and payments.
+        </p>
+
+    </div>
+
+    <a
+        href="{{ url_for('billing.new') }}"
+        class="btn btn-primary"
+    >
+        + New Invoice
+    </a>
+
+</div>
+
+<div class="panel">
+
+    <form
+        method="GET"
+        class="toolbar"
+    >
+
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Search invoice, patient or status..."
+            class="form-control"
+        >
+
+        <button
+            type="submit"
+            class="btn btn-secondary"
+        >
+            Search
+        </button>
+
+    </form>
 
 </div>
 
@@ -19,12 +62,13 @@
             <tr>
 
                 <th>Invoice</th>
-
                 <th>Patient</th>
-
+                <th>Issued</th>
                 <th>Total</th>
-
+                <th>Paid</th>
+                <th>Balance</th>
                 <th>Status</th>
+                <th>Actions</th>
 
             </tr>
 
@@ -32,40 +76,89 @@
 
         <tbody>
 
-        {% for invoice in invoices %}
+        {% if invoices %}
+
+            {% for invoice in invoices %}
 
             <tr>
 
-                <td>
-
-                    <a href="{{ url_for('billing.view', invoice_id=invoice.id) }}">
-                        {{ invoice.invoice_number }}
-                    </a>
-
-                </td>
+                <td>{{ invoice.invoice_number }}</td>
 
                 <td>
-
                     {{ invoice.patient.first_name }}
                     {{ invoice.patient.last_name }}
+                </td>
 
+                <td>
+                    {{ invoice.issued_at.strftime("%d-%m-%Y") }}
+                </td>
+
+                <td>₹ {{ invoice.total }}</td>
+
+                <td>₹ {{ invoice.amount_paid }}</td>
+
+                <td>₹ {{ invoice.balance }}</td>
+
+                <td>
+                    <span class="badge">
+                        {{ invoice.status }}
+                    </span>
                 </td>
 
                 <td>
 
-                    ₹ {{ invoice.total }}
+                    <a
+                        href="{{ url_for('billing.view', invoice_id=invoice.id) }}"
+                        class="btn btn-primary btn-sm"
+                    >
+                        View
+                    </a>
 
-                </td>
+                    <a
+                        href="{{ url_for('billing.edit', invoice_id=invoice.id) }}"
+                        class="btn btn-secondary btn-sm"
+                    >
+                        Edit
+                    </a>
 
-                <td>
+                    {% if invoice.status != "Cancelled" %}
 
-                    {{ invoice.status }}
+                    <form
+                        method="POST"
+                        action="{{ url_for('billing.cancel', invoice_id=invoice.id) }}"
+                        style="display:inline;"
+                    >
+
+                        <button
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Cancel this invoice?')"
+                        >
+                            Cancel
+                        </button>
+
+                    </form>
+
+                    {% endif %}
 
                 </td>
 
             </tr>
 
-        {% endfor %}
+            {% endfor %}
+
+        {% else %}
+
+            <tr>
+
+                <td colspan="8" class="text-center">
+
+                    No invoices found.
+
+                </td>
+
+            </tr>
+
+        {% endif %}
 
         </tbody>
 

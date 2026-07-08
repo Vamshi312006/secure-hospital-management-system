@@ -4,55 +4,71 @@
 
 {% block content %}
 
-<h2>
+<h1>{{ invoice.invoice_number }}</h1>
 
-Invoice {{ invoice.invoice_number }}
-
-</h2>
-
-<div class="panel">
-
-<p>
-
-Patient:
-
+<p><strong>Patient:</strong>
 {{ invoice.patient.first_name }}
-{{ invoice.patient.last_name }}
+{{ invoice.patient.last_name }}</p>
 
-</p>
+<p><strong>Status:</strong>
+{{ invoice.status }}</p>
 
-<p>
+<hr>
 
-Total :
+<h2>Summary</h2>
 
-₹ {{ invoice.total }}
+<ul>
 
-</p>
+<li>Subtotal : ₹ {{ invoice.subtotal }}</li>
 
-<p>
+<li>Tax : ₹ {{ invoice.tax }}</li>
 
-Paid :
+<li>Discount : ₹ {{ invoice.discount }}</li>
 
-₹ {{ invoice.amount_paid }}
+<li>Total : ₹ {{ invoice.total }}</li>
 
-</p>
+<li>Paid : ₹ {{ invoice.amount_paid }}</li>
 
-<p>
+<li>Balance : ₹ {{ invoice.balance }}</li>
 
-Balance :
+</ul>
 
-₹ {{ invoice.balance }}
+<h2>Items</h2>
 
-</p>
+<table>
 
-<p>
+<tr>
 
-Status :
+<th>Category</th>
 
-{{ invoice.status }}
+<th>Description</th>
 
-</p>
+<th>Qty</th>
 
-</div>
+<th>Price</th>
+
+<th>Total</th>
+
+</tr>
+
+{% for item in invoice.items %}
+
+<tr>
+
+<td>{{ item.category }}</td>
+
+<td>{{ item.description }}</td>
+
+<td>{{ item.quantity }}</td>
+
+<td>{{ item.unit_price }}</td>
+
+<td>{{ item.total }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
 
 {% endblock %}

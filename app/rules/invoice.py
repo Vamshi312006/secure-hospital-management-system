@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from app.rules.base import RuleViolation
+from app.rules.base import BusinessRuleError
 
 
 class InvoiceRules:
@@ -9,7 +9,7 @@ class InvoiceRules:
     def ensure_not_paid(invoice):
 
         if invoice.status == "Paid":
-            raise RuleViolation(
+            raise BusinessRuleError(
                 "Paid invoices cannot be modified."
             )
 
@@ -18,7 +18,7 @@ class InvoiceRules:
     def ensure_not_cancelled(invoice):
 
         if invoice.status == "Cancelled":
-            raise RuleViolation(
+            raise BusinessRuleError(
                 "Cancelled invoices cannot be modified."
             )
 
@@ -27,7 +27,7 @@ class InvoiceRules:
     def ensure_has_items(invoice):
 
         if len(invoice.items) == 0:
-            raise RuleViolation(
+            raise BusinessRuleError(
                 "Invoice must contain at least one item."
             )
 
@@ -41,19 +41,19 @@ class PaymentRules:
 
         if amount <= 0:
 
-            raise RuleViolation(
+            raise BusinessRuleError(
                 "Payment amount must be greater than zero."
             )
 
         if invoice.status == "Cancelled":
 
-            raise RuleViolation(
+            raise BusinessRuleError(
                 "Cannot receive payment for a cancelled invoice."
             )
 
         if amount > invoice.balance:
 
-            raise RuleViolation(
+            raise BusinessRuleError(
                 "Payment exceeds outstanding balance."
             )
 
