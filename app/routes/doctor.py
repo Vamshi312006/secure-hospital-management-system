@@ -8,6 +8,7 @@ from flask import (
 )
 
 from app.routes.auth import login_required
+from app.security.decorators import permission_required
 from app.services.doctor_service import DoctorService
 
 doctor_bp = Blueprint(
@@ -19,6 +20,7 @@ doctor_bp = Blueprint(
 
 @doctor_bp.route("/")
 @login_required
+@permission_required("doctor:view")
 def index():
 
     query = request.args.get("q", "").strip()
@@ -37,6 +39,7 @@ def index():
 
 @doctor_bp.route("/new", methods=["GET"])
 @login_required
+@permission_required("doctor:create")
 def new():
 
     return render_template(
@@ -47,6 +50,7 @@ def new():
 
 @doctor_bp.route("/new", methods=["POST"])
 @login_required
+@permission_required("doctor:create")
 def create():
 
     try:
@@ -95,6 +99,7 @@ def create():
 
 @doctor_bp.route("/<int:doctor_id>")
 @login_required
+@permission_required("doctor:view")
 def show(doctor_id):
 
     doctor = DoctorService.get_by_id(doctor_id)
@@ -115,6 +120,7 @@ def show(doctor_id):
 
 @doctor_bp.route("/<int:doctor_id>/edit", methods=["GET"])
 @login_required
+@permission_required("doctor:update")
 def edit(doctor_id):
 
     doctor = DoctorService.get_by_id(doctor_id)
@@ -134,6 +140,7 @@ def edit(doctor_id):
 
 @doctor_bp.route("/<int:doctor_id>/edit", methods=["POST"])
 @login_required
+@permission_required("doctor:update")
 def update(doctor_id):
 
     doctor = DoctorService.get_by_id(doctor_id)
@@ -163,6 +170,7 @@ def update(doctor_id):
 
 @doctor_bp.route("/<int:doctor_id>/delete", methods=["POST"])
 @login_required
+@permission_required("doctor:delete")
 def delete(doctor_id):
 
     doctor = DoctorService.get_by_id(doctor_id)

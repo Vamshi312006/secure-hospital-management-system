@@ -1,0 +1,172 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Appointments
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Appointments</strong>
+        </span>
+
+        <h1>Appointments</h1>
+
+        <p>
+            Manage patient appointments.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('appointment.new') }}"
+            class="btn btn-primary"
+        >
+            <i data-lucide="plus"></i>
+            <span>Book Appointment</span>
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Appointment Directory</h2>
+
+        <form method="GET">
+
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search patient, doctor or status..."
+            >
+
+        </form>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for appointment in appointments %}
+
+                <tr>
+
+                    <td>
+                        {{ appointment.patient.first_name }}
+                        {{ appointment.patient.last_name }}
+                    </td>
+
+                    <td>
+                        Dr.
+                        {{ appointment.doctor.user.username }}
+                    </td>
+
+                    <td>
+                        {{ appointment.appointment_date }}
+                    </td>
+
+                    <td>
+                        {{ appointment.appointment_time }}
+                    </td>
+
+                    <td>
+                        {{ appointment.status }}
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="{{ url_for('appointment.view', appointment_id=appointment.id) }}"
+                            class="btn btn-secondary"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            href="{{ url_for('appointment.edit', appointment_id=appointment.id) }}"
+                            class="btn btn-warning"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('appointment.delete', appointment_id=appointment.id) }}"
+                            style="display:inline;"
+                            onsubmit="return confirm('Delete this appointment?');"
+                        >
+
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+
+                            <button
+                                class="btn btn-danger"
+                                type="submit"
+                            >
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="6">
+
+                        No appointments found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

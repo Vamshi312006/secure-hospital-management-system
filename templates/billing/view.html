@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Invoice{% endblock %}
+
+{% block content %}
+
+<h2>
+
+Invoice {{ invoice.invoice_number }}
+
+</h2>
+
+<div class="panel">
+
+<p>
+
+Patient:
+
+{{ invoice.patient.first_name }}
+{{ invoice.patient.last_name }}
+
+</p>
+
+<p>
+
+Total :
+
+₹ {{ invoice.total }}
+
+</p>
+
+<p>
+
+Paid :
+
+₹ {{ invoice.amount_paid }}
+
+</p>
+
+<p>
+
+Balance :
+
+₹ {{ invoice.balance }}
+
+</p>
+
+<p>
+
+Status :
+
+{{ invoice.status }}
+
+</p>
+
+</div>
+
+{% endblock %}

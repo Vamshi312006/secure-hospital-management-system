@@ -117,6 +117,9 @@ class PatientService:
         for key, value in kwargs.items():
             setattr(patient, key, value)
 
+        if patient.user:
+            patient.user.email = patient.email
+
         db.session.commit()
 
         AuditService.log(

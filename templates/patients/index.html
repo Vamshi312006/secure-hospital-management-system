@@ -86,17 +86,42 @@ Patients
 
                     <td>
 
-                        <button class="btn btn-secondary">
-                            View
-                        </button>
+                        <a
+    href="{{ url_for('patient.view', patient_id=patient.id) }}"
+    class="btn btn-secondary"
+>
+    View
+</a>
 
-                        <button class="btn btn-warning">
-                            Edit
-                        </button>
+                        <a
+    href="{{ url_for('patient.edit', patient_id=patient.id) }}"
+    class="btn btn-warning"
+>
+    Edit
+</a>
 
-                        <button class="btn btn-danger">
-                            Delete
-                        </button>
+                        <form
+    method="POST"
+    action="{{ url_for('patient.delete', patient_id=patient.id) }}"
+    style="display:inline;"
+    onsubmit="return confirm('Delete this patient?');"
+>
+
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+
+    <button
+        class="btn btn-danger"
+        type="submit"
+    >
+        Delete
+    </button>
+
+</form>
 
                     </td>
 

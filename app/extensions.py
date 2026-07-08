@@ -3,10 +3,11 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_limiter import Limiter
+from flask_wtf.csrf import CSRFProtect
 
 db = SQLAlchemy()
 migrate = Migrate()
-
+csrf = CSRFProtect()
 
 def login_rate_limit_key():
 
@@ -19,7 +20,6 @@ def login_rate_limit_key():
     )
 
     return f"{ip}:{username}"
-
 
 limiter = Limiter(
     key_func=login_rate_limit_key,

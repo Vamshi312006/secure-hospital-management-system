@@ -1,0 +1,132 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Appointment Details
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Appointments /
+            <strong>View</strong>
+        </span>
+
+        <h1>Appointment Details</h1>
+
+        <p>
+            View appointment information.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('appointment.edit', appointment_id=appointment.id) }}"
+            class="btn btn-warning"
+        >
+            Edit
+        </a>
+
+        <a
+            href="{{ url_for('appointment.index') }}"
+            class="btn btn-secondary"
+        >
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+        <h2>Appointment Information</h2>
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <tbody>
+
+                <tr>
+                    <th>Patient</th>
+                    <td>
+                        {{ appointment.patient.first_name }}
+                        {{ appointment.patient.last_name }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Doctor</th>
+                    <td>
+                        Dr. {{ appointment.doctor.user.username }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Department</th>
+                    <td>
+                        {{ appointment.doctor.department.name }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Specialization</th>
+                    <td>
+                        {{ appointment.doctor.specialization }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Date</th>
+                    <td>
+                        {{ appointment.appointment_date }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Time</th>
+                    <td>
+                        {{ appointment.appointment_time }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        {{ appointment.status }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Reason</th>
+                    <td>
+                        {{ appointment.reason or "-" }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Created</th>
+                    <td>
+                        {{ appointment.created_at }}
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

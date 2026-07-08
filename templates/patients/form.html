@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 
 {% block title %}
-Add Patient
+{{ "Edit Patient" if edit_mode else "Add Patient" }}
 {% endblock %}
 
 {% block content %}
@@ -13,12 +13,14 @@ Add Patient
         <span class="breadcrumb">
             Home /
             Patients /
-            <strong>New Patient</strong>
+            <strong>{{ "Edit" if edit_mode else "New" }} Patient</strong>
         </span>
 
-        <h1>Add Patient</h1>
+        <h1>{{ "Edit Patient" if edit_mode else "Add Patient" }}</h1>
 
-        <p>Create a new patient account.</p>
+        <p>
+            {{ "Update patient information." if edit_mode else "Create a new patient account." }}
+        </p>
 
     </div>
 
@@ -35,132 +37,237 @@ Add Patient
 
 </div>
 
-<form method="POST" class="form">
+<form
+    method="POST"
+    action="{% if edit_mode %}{{ url_for('patient.update', patient_id=patient.id) }}{% else %}{{ url_for('patient.create') }}{% endif %}"
+    class="form"
+>
 
-    <div class="panel">
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
 
-        <div class="panel-header">
-            <h2>Account Information</h2>
-        </div>
 
-        <div class="panel-body">
+{% if not edit_mode %}
 
-            <div class="form-row">
+<div class="panel">
 
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input class="form-control" type="text" name="username" required>
-                </div>
+    <div class="panel-header">
+        <h2>Account Information</h2>
+    </div>
 
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input class="form-control" type="email" name="email" required>
-                </div>
+    <div class="panel-body">
 
+        <div class="form-row">
+
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input class="form-control" type="text" name="username" required>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Password</label>
-                <input class="form-control" type="password" name="password" required>
+                <label class="form-label">Email</label>
+                <input class="form-control" type="email" name="email" required>
             </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-control" type="password" name="password" required>
+        </div>
+
+    </div>
+
+</div>
+
+<br>
+
+{% endif %}
+
+<div class="panel">
+
+    <div class="panel-header">
+        <h2>Patient Information</h2>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="first_name"
+                    value="{{ patient.first_name if edit_mode else '' }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="last_name"
+                    value="{{ patient.last_name if edit_mode else '' }}"
+                    required
+                >
+            </div>
+
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input
+                    class="form-control"
+                    type="text" id="dob"
+                    name="dob"
+                    value="{{ patient.dob if edit_mode and patient.dob else '' }}"
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Gender</label>
+
+                <select class="form-control" name="gender">
+
+                    <option value="">Select</option>
+
+                    <option value="Male"
+                    {% if edit_mode and patient.gender=="Male" %}selected{% endif %}>
+                        Male
+                    </option>
+
+                    <option value="Female"
+                    {% if edit_mode and patient.gender=="Female" %}selected{% endif %}>
+                        Female
+                    </option>
+
+                    <option value="Other"
+                    {% if edit_mode and patient.gender=="Other" %}selected{% endif %}>
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label class="form-label">Blood Group</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="blood_group"
+                    value="{{ patient.blood_group if edit_mode else '' }}"
+                >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="phone"
+                    value="{{ patient.phone if edit_mode else '' }}"
+                >
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="form-label">Email</label>
+
+            <input
+                class="form-control"
+                type="email"
+                name="email"
+                value="{{ patient.email if edit_mode else '' }}"
+                {% if not edit_mode %}style="display:none"{% endif %}
+            >
+
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Address</label>
+
+            <textarea
+                class="form-control"
+                name="address"
+            >{{ patient.address if edit_mode else '' }}</textarea>
+
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Emergency Contact</label>
+
+            <input
+                class="form-control"
+                type="text"
+                name="emergency_contact"
+                value="{{ patient.emergency_contact if edit_mode else '' }}"
+            >
 
         </div>
 
     </div>
 
-    <br>
+</div>
 
-    <div class="panel">
+<br>
 
-        <div class="panel-header">
-            <h2>Patient Information</h2>
-        </div>
+<div class="page-actions">
 
-        <div class="panel-body">
+    <a
+        href="{{ url_for('patient.index') }}"
+        class="btn btn-secondary"
+    >
+        Cancel
+    </a>
 
-            <div class="form-row">
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+        {{ "Update Patient" if edit_mode else "Save Patient" }}
+    </button>
 
-                <div class="form-group">
-                    <label class="form-label">First Name</label>
-                    <input class="form-control" type="text" name="first_name" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Last Name</label>
-                    <input class="form-control" type="text" name="last_name" required>
-                </div>
-
-            </div>
-
-            <div class="form-row">
-
-                <div class="form-group">
-                    <label class="form-label">Date of Birth</label>
-                    <input class="form-control" type="date" name="dob">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Gender</label>
-
-                    <select class="form-control" name="gender">
-                        <option value="">Select</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
-                    </select>
-
-                </div>
-
-            </div>
-
-            <div class="form-row">
-
-                <div class="form-group">
-                    <label class="form-label">Blood Group</label>
-                    <input class="form-control" type="text" name="blood_group">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Phone</label>
-                    <input class="form-control" type="text" name="phone">
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Address</label>
-                <textarea class="form-control" name="address"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Emergency Contact</label>
-                <input class="form-control" type="text" name="emergency_contact">
-            </div>
-
-        </div>
-
-    </div>
-
-    <br>
-
-    <div class="page-actions">
-
-        <a
-            href="{{ url_for('patient.index') }}"
-            class="btn btn-secondary"
-        >
-            Cancel
-        </a>
-
-        <button
-            type="submit"
-            class="btn btn-primary"
-        >
-            Save Patient
-        </button>
-
-    </div>
+</div>
 
 </form>
 
 {% endblock %}
+
+{% block page_js %}
+
+<script>
+
+flatpickr("#dob",{
+
+    dateFormat:"Y-m-d",
+
+    altInput:true,
+
+    altFormat:"d M Y",
+
+    maxDate:"today",
+
+    allowInput:false
+
+});
+
+</script>
+
+{% endblock %}
+

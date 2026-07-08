@@ -1,0 +1,140 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Medical Record
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Medical Records /
+            <strong>View</strong>
+        </span>
+
+        <h1>Medical Record</h1>
+
+        <p>
+            View patient medical record.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('record.edit', record_id=record.id) }}"
+            class="btn btn-warning"
+        >
+            Edit
+        </a>
+
+        <a
+            href="{{ url_for('record.index') }}"
+            class="btn btn-secondary"
+        >
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Patient Information</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <tbody>
+
+                <tr>
+                    <th>Patient</th>
+                    <td>
+                        {{ record.patient.first_name }}
+                        {{ record.patient.last_name }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Doctor</th>
+                    <td>
+                        Dr. {{ record.doctor.user.username }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Department</th>
+                    <td>
+                        {{ record.doctor.department.name }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Specialization</th>
+                    <td>
+                        {{ record.doctor.specialization }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Diagnosis</th>
+                    <td>
+                        {{ record.diagnosis }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Symptoms</th>
+                    <td>
+                        {{ record.symptoms or "-" }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Treatment</th>
+                    <td>
+                        {{ record.treatment or "-" }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Clinical Notes</th>
+                    <td>
+                        {{ record.notes or "-" }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Created</th>
+                    <td>
+                        {{ record.created_at }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Last Updated</th>
+                    <td>
+                        {{ record.updated_at }}
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

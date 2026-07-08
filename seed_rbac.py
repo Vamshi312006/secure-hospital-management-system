@@ -16,6 +16,9 @@ ROLE_PERMISSIONS = {
         "patient:update",
         "appointment:view",
         "appointment:update",
+        "billing:view",
+        "billing:create",
+        "billing:payment",
         "record:view",
         "record:create",
         "record:update",
@@ -35,6 +38,15 @@ ROLE_PERMISSIONS = {
         "patient:view",
         "record:view",
         "billing:view",
+    ],
+
+
+    "Accountant": [
+        "billing:view",
+        "billing:create",
+        "billing:update",
+        "billing:delete",
+        "billing:payment",
     ],
 
     "Patient": [

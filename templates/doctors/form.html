@@ -37,6 +37,13 @@ Add Doctor
 
 <form method="POST" class="form">
 
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+
     <div class="panel">
 
         <div class="panel-header">

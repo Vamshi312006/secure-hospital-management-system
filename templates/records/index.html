@@ -1,0 +1,166 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Medical Records
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Medical Records</strong>
+        </span>
+
+        <h1>Medical Records</h1>
+
+        <p>
+            Manage patient medical records.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('record.new') }}"
+            class="btn btn-primary"
+        >
+            <i data-lucide="plus"></i>
+            <span>New Record</span>
+        </a>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Record Directory</h2>
+
+        <form method="GET">
+
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search..."
+            >
+
+        </form>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Diagnosis</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for record in records %}
+
+                <tr>
+
+                    <td>
+                        {{ record.patient.first_name }}
+                        {{ record.patient.last_name }}
+                    </td>
+
+                    <td>
+                        Dr.
+                        {{ record.doctor.user.username }}
+                    </td>
+
+                    <td>
+                        {{ record.diagnosis }}
+                    </td>
+
+                    <td>
+                        {{ record.created_at.strftime("%Y-%m-%d") }}
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="{{ url_for('record.view',record_id=record.id) }}"
+                            class="btn btn-secondary"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            href="{{ url_for('record.edit',record_id=record.id) }}"
+                            class="btn btn-warning"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('record.delete',record_id=record.id) }}"
+                            style="display:inline;"
+                            onsubmit="return confirm('Delete this medical record?');"
+                        >
+
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="{{ csrf_token() }}"
+    >
+
+
+                            <button
+                                class="btn btn-danger"
+                                type="submit"
+                            >
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="5">
+
+                        No records found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

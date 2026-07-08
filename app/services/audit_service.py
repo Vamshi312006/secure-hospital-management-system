@@ -37,3 +37,50 @@ class AuditService:
 
         return audit
 
+
+    # ------------------------------------------------------
+    # Read Operations
+    # ------------------------------------------------------
+
+    @staticmethod
+    def get_all():
+
+        return (
+            AuditLog.query
+            .order_by(
+                AuditLog.created_at.desc()
+            )
+            .all()
+        )
+
+
+    @staticmethod
+    def get_by_id(audit_id):
+
+        return db.session.get(
+            AuditLog,
+            audit_id,
+        )
+
+
+    @staticmethod
+    def search(query):
+
+        if not query:
+            return AuditService.get_all()
+
+        return (
+            AuditLog.query
+            .filter(
+                db.or_(
+                    AuditLog.action.ilike(f"%{query}%"),
+                    AuditLog.resource.ilike(f"%{query}%"),
+                    AuditLog.status.ilike(f"%{query}%"),
+                )
+            )
+            .order_by(
+                AuditLog.created_at.desc()
+            )
+            .all()
+        )
+

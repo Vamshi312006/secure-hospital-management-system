@@ -22,24 +22,15 @@ Dashboard
             <strong>Dashboard</strong>
         </span>
 
-        <h1>Dashboard</h1>
+        <h1>Operations Dashboard</h1>
 
         <p>
-            Secure Healthcare Platform overview.
+            Operational overview of the Secure Healthcare Platform.
         </p>
 
     </div>
 
-    <div class="page-actions">
-
-        <button class="btn btn-primary">
-            <i data-lucide="plus"></i>
-            <span>New Patient</span>
-        </button>
-
     </div>
-
-</div>
 
 <section class="dashboard-grid">
 
@@ -61,7 +52,7 @@ Dashboard
 
         <span>{{ metrics.patient_count }}</span>
 
-        <small>Total registered patients</small>
+        <small>Registered patients</small>
 
     </div>
 
@@ -73,7 +64,7 @@ Dashboard
                 <i data-lucide="stethoscope"></i>
             </div>
 
-            <span class="badge badge-primary">
+            <span class="badge badge-success">
                 Live
             </span>
 
@@ -83,7 +74,7 @@ Dashboard
 
         <span>{{ metrics.doctor_count }}</span>
 
-        <small>Registered doctors</small>
+        <small>Active medical staff</small>
 
     </div>
 
@@ -118,16 +109,16 @@ Dashboard
             </div>
 
             <span class="badge badge-success">
-                Live
+                Active
             </span>
 
         </div>
 
-        <h3>Active Sessions</h3>
+        <h3>Sessions</h3>
 
         <span>{{ metrics.active_sessions }}</span>
 
-        <small>Authenticated users</small>
+        <small>Authenticated sessions</small>
 
     </div>
 
@@ -139,17 +130,39 @@ Dashboard
                 <i data-lucide="shield-alert"></i>
             </div>
 
-            <span class="badge badge-danger">
-                Safe
+            <span class="badge badge-warning">
+                Monitor
             </span>
 
         </div>
 
-        <h3>Security Alerts</h3>
+        <h3>Failed Logins</h3>
 
-        <span>{{ metrics.security_alerts }}</span>
+        <span>{{ metrics.failed_logins }}</span>
 
-        <small>No incidents detected</small>
+        <small>Authentication failures</small>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <div class="stat-icon">
+                <i data-lucide="history"></i>
+            </div>
+
+            <span class="badge badge-primary">
+                Live
+            </span>
+
+        </div>
+
+        <h3>Audit Events</h3>
+
+        <span>{{ metrics.audit_events }}</span>
+
+        <small>Recorded events</small>
 
     </div>
 
@@ -161,46 +174,217 @@ Dashboard
 
         <div class="panel-header">
 
-            <h2>Recent Activity</h2>
+            <h2>Recent Audit Events</h2>
+
+            <a
+                href="{{ url_for('audit.index') }}"
+                class="btn btn-secondary btn-sm"
+            >
+                View All
+            </a>
 
         </div>
 
         <div class="panel-body">
 
-            <ul>
+            <table class="table">
 
-                <li>Administrator logged in</li>
+                <thead>
 
-                <li>Dashboard loaded successfully</li>
+                    <tr>
 
-                <li>Database connection healthy</li>
+                        <th>Time</th>
 
-            </ul>
+                        <th>Action</th>
+
+                        <th>Resource</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for log in metrics.recent_audit_events %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ log.created_at.strftime("%H:%M") }}
+
+                        </td>
+
+                        <td>
+
+                            {{ log.action }}
+
+                        </td>
+
+                        <td>
+
+                            {{ log.resource }}
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge badge-success">
+
+                                {{ log.status }}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="4" class="table-empty">
+
+                            No audit events available.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
 
         </div>
 
     </div>
 
-    <div class="panel">
+    
+<div class="panel">
 
-        <div class="panel-header">
+    <div class="panel-header">
 
-            <h2>Security Status</h2>
+        <h2>Security Status</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <div class="security-item">
+
+            <span>System Health</span>
+
+            <strong class="text-success">
+                Healthy
+            </strong>
 
         </div>
 
-        <div class="panel-body">
+        <div class="security-item">
 
-            <p>✔ System Healthy</p>
+            <span>Active Sessions</span>
 
-            <p>Sessions: {{ metrics.active_sessions }}</p>
+            <strong>
+                {{ metrics.active_sessions }}
+            </strong>
 
-            <p>Alerts: {{ metrics.security_alerts }}</p>
+        </div>
+
+        <div class="security-item">
+
+            <span>Failed Logins</span>
+
+            <strong>
+                {{ metrics.failed_logins }}
+            </strong>
+
+        </div>
+
+        <div class="security-item">
+
+            <span>Audit Events</span>
+
+            <strong>
+                {{ metrics.audit_events }}
+            </strong>
+
+        </div>
+
+        <div class="security-item">
+
+            <span>Security Alerts</span>
+
+            <strong>
+                {{ metrics.security_alerts }}
+            </strong>
 
         </div>
 
     </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Detection Summary</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <div class="security-item">
+
+            <span>Brute Force Attempts</span>
+
+            <strong>{{ metrics.brute_force_attempts }}</strong>
+
+        </div>
+
+        <div class="security-item">
+
+            <span>Failed Logins</span>
+
+            <strong>{{ metrics.failed_logins }}</strong>
+
+        </div>
+
+        <div class="security-item">
+
+            <span>High Risk Sessions</span>
+
+            <strong>{{ metrics.high_risk_sessions }}</strong>
+
+        </div>
+
+        <div class="security-item">
+
+            <span>Privilege Escalations</span>
+
+            <strong>{{ metrics.privilege_escalations }}</strong>
+
+        </div>
+
+        <div class="security-item">
+
+            <span>Critical Audit Events</span>
+
+            <strong>{{ metrics.critical_events }}</strong>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 </section>
+
 
 {% endblock %}

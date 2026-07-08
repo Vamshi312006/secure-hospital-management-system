@@ -33,6 +33,7 @@ PERMISSIONS = [
     ("billing:create", "Create billing"),
     ("billing:update", "Update billing"),
     ("billing:delete", "Delete billing"),
+    ("billing:payment", "Receive payments"),
 
     # Administration
     ("admin:access", "Administrative access"),

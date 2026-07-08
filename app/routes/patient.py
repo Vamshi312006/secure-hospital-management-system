@@ -8,7 +8,9 @@ from flask import (
 )
 
 from app.routes.auth import login_required
+from app.security.decorators import permission_required
 from app.services.patient_service import PatientService
+from app.validators import PatientValidator, ValidationError
 
 patient_bp = Blueprint(
     "patient",
@@ -19,6 +21,7 @@ patient_bp = Blueprint(
 
 @patient_bp.route("/")
 @login_required
+@permission_required("patient:view")
 def index():
 
     query = request.args.get("q", "").strip()
@@ -35,8 +38,104 @@ def index():
     )
 
 
+
+
+@patient_bp.route("/<int:patient_id>")
+@login_required
+@permission_required("patient:view")
+def view(patient_id):
+
+    patient = PatientService.get_by_id(patient_id)
+
+    if patient is None:
+
+        flash(
+            "Patient not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("patient.index")
+        )
+
+    return render_template(
+        "patients/view.html",
+        patient=patient,
+    )
+
+
+
+@patient_bp.route("/<int:patient_id>/edit", methods=["GET"])
+@login_required
+@permission_required("patient:update")
+def edit(patient_id):
+
+    patient = PatientService.get_by_id(patient_id)
+
+    if patient is None:
+
+        flash(
+            "Patient not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("patient.index")
+        )
+
+    return render_template(
+        "patients/form.html",
+        patient=patient,
+        edit_mode=True,
+    )
+
+
+@patient_bp.route("/<int:patient_id>/edit", methods=["POST"])
+@login_required
+@permission_required("patient:update")
+def update(patient_id):
+
+    patient = PatientService.get_by_id(patient_id)
+
+    if patient is None:
+
+        flash(
+            "Patient not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("patient.index")
+        )
+
+    PatientService.update(
+
+        patient,
+
+        first_name=request.form["first_name"],
+        last_name=request.form["last_name"],
+        dob=request.form["dob"] or None,
+        gender=request.form["gender"],
+        blood_group=request.form["blood_group"],
+        phone=request.form["phone"],
+        email=request.form["email"],
+        address=request.form["address"],
+        emergency_contact=request.form["emergency_contact"],
+    )
+
+    flash(
+        "Patient updated successfully.",
+        "success",
+    )
+
+    return redirect(
+        url_for("patient.index")
+    )
+
+
 @patient_bp.route("/new", methods=["GET"])
 @login_required
+@permission_required("patient:create")
 def new():
 
     return render_template(
@@ -46,22 +145,25 @@ def new():
 
 @patient_bp.route("/new", methods=["POST"])
 @login_required
+@permission_required("patient:create")
 def create():
 
     try:
 
+        data = PatientValidator.validate_create(request.form)
+
         PatientService.create(
             username=request.form["username"],
-            email=request.form["email"],
             password=request.form["password"],
-            first_name=request.form["first_name"],
-            last_name=request.form["last_name"],
-            dob=request.form["dob"] or None,
-            gender=request.form["gender"],
-            blood_group=request.form["blood_group"],
-            phone=request.form["phone"],
-            address=request.form["address"],
-            emergency_contact=request.form["emergency_contact"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            dob=data["dob"],
+            gender=data["gender"],
+            blood_group=data["blood_group"],
+            phone=data["phone"],
+            email=data["email"],
+            address=data["address"],
+            emergency_contact=request.form.get("emergency_contact", ""),
         )
 
         flash(
@@ -69,7 +171,7 @@ def create():
             "success",
         )
 
-    except ValueError as e:
+    except (ValueError, ValidationError) as e:
 
         flash(
             str(e),
@@ -79,6 +181,36 @@ def create():
         return redirect(
             url_for("patient.new")
         )
+
+    return redirect(
+        url_for("patient.index")
+    )
+
+
+@patient_bp.route("/<int:patient_id>/delete", methods=["POST"])
+@login_required
+@permission_required("patient:delete")
+def delete(patient_id):
+
+    patient = PatientService.get_by_id(patient_id)
+
+    if patient is None:
+
+        flash(
+            "Patient not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("patient.index")
+        )
+
+    PatientService.delete(patient)
+
+    flash(
+        "Patient deleted successfully.",
+        "success",
+    )
 
     return redirect(
         url_for("patient.index")

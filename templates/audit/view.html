@@ -1,0 +1,109 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Audit Log Details
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Audit Logs /
+            <strong>Details</strong>
+        </span>
+
+        <h1>Audit Log Details</h1>
+
+        <p>
+            View detailed audit event information.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('audit.index') }}"
+            class="btn btn-secondary"
+        >
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Event Information</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <tbody>
+
+                <tr>
+                    <th>ID</th>
+                    <td>{{ log.id }}</td>
+                </tr>
+
+                <tr>
+                    <th>User</th>
+                    <td>{{ log.user.username if log.user else "-" }}</td>
+                </tr>
+
+                <tr>
+                    <th>Action</th>
+                    <td>{{ log.action }}</td>
+                </tr>
+
+                <tr>
+                    <th>Resource</th>
+                    <td>{{ log.resource }}</td>
+                </tr>
+
+                <tr>
+                    <th>Resource ID</th>
+                    <td>{{ log.resource_id or "-" }}</td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>{{ log.status }}</td>
+                </tr>
+
+                <tr>
+                    <th>IP Address</th>
+                    <td>{{ log.ip_address }}</td>
+                </tr>
+
+                <tr>
+                    <th>User Agent</th>
+                    <td style="word-break: break-word;">
+                        {{ log.user_agent }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Timestamp</th>
+                    <td>{{ log.created_at }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

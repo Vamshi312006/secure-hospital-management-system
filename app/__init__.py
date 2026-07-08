@@ -7,10 +7,18 @@ from flask import (
 )
 
 from flask_limiter.errors import RateLimitExceeded
+from flask_wtf.csrf import CSRFError
 
 from app.config import Config
-from app.extensions import db, migrate, limiter
+from app.extensions import (
+    db,
+    migrate,
+    limiter,
+    csrf,
+)
 from app.models import *
+
+from app.errors.handlers import register_error_handlers
 
 from app.routes import (
     home_bp,
@@ -19,6 +27,10 @@ from app.routes import (
     dev_bp,
     patient_bp,
     doctor_bp,
+    appointment_bp,
+    record_bp,
+    billing_bp,
+    audit_bp,
 )
 
 
@@ -35,6 +47,34 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     limiter.init_app(app)
+    csrf.init_app(app)
+
+    register_error_handlers(app)
+
+    @app.after_request
+    def apply_security_headers(response):
+
+        response.headers["X-Frame-Options"] = "DENY"
+
+        response.headers["X-Content-Type-Options"] = "nosniff"
+
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+        response.headers["Permissions-Policy"] = (
+            "camera=(), "
+            "microphone=(), "
+            "geolocation=()"
+        )
+
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "img-src 'self' data:; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self' 'unsafe-inline'; "
+            "font-src 'self' data:;"
+        )
+
+        return response
 
     @app.errorhandler(RateLimitExceeded)
     def handle_rate_limit(e):
@@ -48,11 +88,27 @@ def create_app():
             request.referrer or url_for("auth.login_page")
         )
 
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+
+        flash(
+            "Security validation failed. Please refresh the page and try again.",
+            "danger",
+        )
+
+        return redirect(
+            request.referrer or url_for("home.index")
+        ), 400
+
     app.register_blueprint(home_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(dev_bp)
     app.register_blueprint(patient_bp)
     app.register_blueprint(doctor_bp)
+    app.register_blueprint(appointment_bp)
+    app.register_blueprint(record_bp)
+    app.register_blueprint(billing_bp)
+    app.register_blueprint(audit_bp)
 
     return app

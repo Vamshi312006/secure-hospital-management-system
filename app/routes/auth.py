@@ -53,6 +53,8 @@ def login():
 
     session.clear()
 
+    session.permanent = True
+
     session["user_id"] = user.id
     session["username"] = user.username
     session["role"] = user.role.name
@@ -62,7 +64,7 @@ def login():
     return redirect(url_for("dashboard.dashboard"))
 
 
-@auth_bp.route("/logout")
+@auth_bp.route("/logout", methods=["POST"])
 def logout():
 
     session.clear()

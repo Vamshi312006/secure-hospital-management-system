@@ -1,7 +1,5 @@
 <nav class="navbar">
 
-    <!-- Left -->
-
     <div class="navbar__left">
 
         <button
@@ -37,8 +35,6 @@
 
     </div>
 
-    <!-- Center -->
-
     <div class="navbar__center">
 
         {% if session.get("user_id") %}
@@ -58,8 +54,6 @@
 
     </div>
 
-    <!-- Right -->
-
     <div class="navbar__right">
 
         {% if session.get("user_id") %}
@@ -77,39 +71,47 @@
             <div class="navbar__profile">
 
                 <div class="navbar__avatar">
-
                     {{ session.get("username","A")[0]|upper }}
-
                 </div>
 
                 <div class="navbar__user">
 
                     <span class="navbar__username">
-
                         {{ session.get("username") }}
-
                     </span>
 
                     <small>
-
                         {{ session.get("role","User") }}
-
                     </small>
 
                 </div>
 
             </div>
 
-            <a
-                href="{{ url_for('auth.logout') }}"
-                class="navbar__logout"
+            <form
+                method="POST"
+                action="{{ url_for('auth.logout') }}"
+                style="display:inline;"
             >
 
-                <i data-lucide="log-out"></i>
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
 
-                <span>Logout</span>
+                <button
+                    type="submit"
+                    class="navbar__logout"
+                >
 
-            </a>
+                    <i data-lucide="log-out"></i>
+
+                    <span>Logout</span>
+
+                </button>
+
+            </form>
 
         {% else %}
 
