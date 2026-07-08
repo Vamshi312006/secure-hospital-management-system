@@ -4,6 +4,13 @@
 Dashboard
 {% endblock %}
 
+{% block page_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/pages/dashboard.css') }}"
+>
+{% endblock %}
+
 {% block content %}
 
 <div class="page-header">

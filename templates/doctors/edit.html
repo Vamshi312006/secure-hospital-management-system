@@ -1,0 +1,171 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Edit Doctor
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Doctors /
+            <strong>Edit</strong>
+        </span>
+
+        <h1>Edit Doctor</h1>
+
+        <p>Update doctor information.</p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('doctor.show', doctor_id=doctor.id) }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </div>
+
+</div>
+
+<form method="POST" class="form">
+
+<div class="panel">
+
+<div class="panel-header">
+<h2>Professional Information</h2>
+</div>
+
+<div class="panel-body">
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="form-label">
+Department
+</label>
+
+<select
+class="form-control"
+name="department_id"
+required
+>
+
+{% for department in departments %}
+
+<option
+value="{{ department.id }}"
+{% if department.id == doctor.department_id %}selected{% endif %}
+>
+{{ department.name }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+Specialization
+</label>
+
+<input
+class="form-control"
+type="text"
+name="specialization"
+value="{{ doctor.specialization }}"
+required
+>
+
+</div>
+
+</div>
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="form-label">
+Qualification
+</label>
+
+<input
+class="form-control"
+type="text"
+name="qualification"
+value="{{ doctor.qualification or '' }}"
+>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+Phone
+</label>
+
+<input
+class="form-control"
+type="text"
+name="phone"
+value="{{ doctor.phone or '' }}"
+>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+Experience (Years)
+</label>
+
+<input
+class="form-control"
+type="number"
+name="experience"
+min="0"
+value="{{ doctor.experience }}"
+>
+
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="page-actions">
+
+<a
+href="{{ url_for('doctor.show', doctor_id=doctor.id) }}"
+class="btn btn-secondary"
+>
+Cancel
+</a>
+
+<button
+type="submit"
+class="btn btn-primary"
+>
+Update Doctor
+</button>
+
+</div>
+
+</form>
+
+{% endblock %}

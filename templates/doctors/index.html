@@ -1,0 +1,154 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Doctors
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Doctors</strong>
+        </span>
+
+        <h1>Doctors</h1>
+
+        <p>
+            Manage registered doctors.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a href="{{ url_for('doctor.new') }}" class="btn btn-primary">
+            <i data-lucide="plus"></i>
+            <span>Add Doctor</span>
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Doctor Directory</h2>
+
+        <form method="GET">
+
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search license or specialization..."
+            >
+
+        </form>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Doctor</th>
+                    <th>License</th>
+                    <th>Department</th>
+                    <th>Specialization</th>
+                    <th>Phone</th>
+                    <th>Experience</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for doctor in doctors %}
+
+                <tr>
+
+                    <td>
+                        <strong>{{ doctor.user.username }}</strong><br>
+                        <small>{{ doctor.user.email }}</small>
+                    </td>
+
+                    <td>{{ doctor.license_number }}</td>
+
+                    <td>{{ doctor.department.name }}</td>
+
+                    <td>{{ doctor.specialization }}</td>
+
+                    <td>{{ doctor.phone or "-" }}</td>
+
+                    <td>{{ doctor.experience }} Years</td>
+
+                    <td>
+
+                        <a
+                            href="{{ url_for('doctor.show', doctor_id=doctor.id) }}"
+                            class="btn btn-secondary"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            href="{{ url_for('doctor.edit', doctor_id=doctor.id) }}"
+                            class="btn btn-warning"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('doctor.delete', doctor_id=doctor.id) }}"
+                            style="display:inline;"
+                            onsubmit="return confirm('Delete this doctor?');"
+                        >
+                            <button
+                                class="btn btn-danger"
+                                type="submit"
+                            >
+                                Delete
+                            </button>
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="7">
+
+                        No doctors found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

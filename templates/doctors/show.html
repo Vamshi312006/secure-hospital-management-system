@@ -1,0 +1,100 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Doctor Details
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Doctors /
+            <strong>{{ doctor.user.username }}</strong>
+        </span>
+
+        <h1>{{ doctor.user.username }}</h1>
+
+        <p>Doctor profile</p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('doctor.index') }}"
+            class="btn btn-secondary"
+        >
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Account Information</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <tbody>
+
+                <tr>
+                    <th>Username</th>
+                    <td>{{ doctor.user.username }}</td>
+                </tr>
+
+                <tr>
+                    <th>Email</th>
+                    <td>{{ doctor.user.email }}</td>
+                </tr>
+
+                <tr>
+                    <th>License</th>
+                    <td>{{ doctor.license_number }}</td>
+                </tr>
+
+                <tr>
+                    <th>Department</th>
+                    <td>{{ doctor.department.name }}</td>
+                </tr>
+
+                <tr>
+                    <th>Specialization</th>
+                    <td>{{ doctor.specialization }}</td>
+                </tr>
+
+                <tr>
+                    <th>Qualification</th>
+                    <td>{{ doctor.qualification or "-" }}</td>
+                </tr>
+
+                <tr>
+                    <th>Phone</th>
+                    <td>{{ doctor.phone or "-" }}</td>
+                </tr>
+
+                <tr>
+                    <th>Experience</th>
+                    <td>{{ doctor.experience }} Years</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

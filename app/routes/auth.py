@@ -11,7 +11,7 @@ from flask import (
     url_for,
 )
 
-from app.extensions import db
+from app.extensions import db, limiter
 from app.services.auth_service import authenticate
 
 auth_bp = Blueprint("auth", __name__)
@@ -32,6 +32,7 @@ def login_page():
 
 
 @auth_bp.route("/login", methods=["POST"])
+@limiter.limit("5 per minute")
 def login():
 
     username = request.form.get("username")

@@ -1,24 +1,22 @@
 <aside class="sidebar">
 
     <div class="sidebar__header">
-
         <span>Navigation</span>
-
     </div>
 
     <nav class="sidebar__menu">
 
-        <a href="{{ url_for('dashboard.dashboard') }}" class="sidebar__item active">
+        <a href="{{ url_for('dashboard.dashboard') }}" class="sidebar__item">
             <i data-lucide="layout-dashboard"></i>
             <span>Dashboard</span>
         </a>
 
-        <a href="#" class="sidebar__item">
+        <a href="{{ url_for('patient.index') }}" class="sidebar__item">
             <i data-lucide="users"></i>
             <span>Patients</span>
         </a>
 
-        <a href="#" class="sidebar__item">
+        <a href="{{ url_for('doctor.index') }}" class="sidebar__item">
             <i data-lucide="stethoscope"></i>
             <span>Doctors</span>
         </a>

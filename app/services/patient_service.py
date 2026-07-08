@@ -1,56 +1,147 @@
-from flask import session
+from app.extensions import db
 
-from database import get_db
+from app.models.user import User
+from app.models.role import Role
+from app.models.patient import Patient
+
+from app.services.auth_service import hash_password
+from app.services.audit_service import AuditService
 
 
-def get_patient_id_for_current_user():
-    """
-    Return a patient_id corresponding to the currently logged-in user.
+class PatientService:
 
-    Strategy:
-      1) If patients.patient_id == session['user_id'] exists -> use it.
-      2) Else try to find a patient record by email matching users.username.
-      3) If none found -> return None.
-    """
-
-    if "user_id" not in session:
-        return None
-
-    user_id = session["user_id"]
-
-    db = get_db()
-    cur = db.cursor()
-
-    # Strategy 1
-    cur.execute(
-        "SELECT patient_id FROM patients WHERE patient_id=%s",
-        (user_id,),
-    )
-
-    row = cur.fetchone()
-
-    if row:
-        return row[0]
-
-    # Strategy 2
-    cur.execute(
-        "SELECT username FROM users WHERE user_id=%s",
-        (user_id,),
-    )
-
-    user = cur.fetchone()
-
-    if user:
-        username = user[0]
-
-        cur.execute(
-            "SELECT patient_id FROM patients WHERE email=%s",
-            (username,),
+    @staticmethod
+    def get_all():
+        return (
+            Patient.query
+            .order_by(Patient.created_at.desc())
+            .all()
         )
 
-        patient = cur.fetchone()
+    @staticmethod
+    def get_by_id(patient_id):
+        return db.session.get(Patient, patient_id)
 
-        if patient:
-            return patient[0]
+    @staticmethod
+    def search(query):
 
-    return None
+        if not query:
+            return PatientService.get_all()
+
+        return (
+            Patient.query
+            .filter(
+                db.or_(
+                    Patient.first_name.ilike(f"%{query}%"),
+                    Patient.last_name.ilike(f"%{query}%"),
+                    Patient.phone.ilike(f"%{query}%"),
+                    Patient.email.ilike(f"%{query}%"),
+                )
+            )
+            .all()
+        )
+
+    @staticmethod
+    def create(
+        username,
+        email,
+        password,
+        first_name,
+        last_name,
+        dob,
+        gender,
+        blood_group,
+        phone,
+        address,
+        emergency_contact,
+    ):
+
+        if User.query.filter_by(username=username).first():
+            raise ValueError("Username already exists.")
+
+        if User.query.filter_by(email=email).first():
+            raise ValueError("Email already exists.")
+
+        role = Role.query.filter_by(
+            name="Patient"
+        ).first()
+
+        if role is None:
+            raise ValueError("Patient role not found.")
+
+        try:
+
+            user = User(
+                username=username,
+                email=email,
+                password_hash=hash_password(password),
+                role_id=role.id,
+            )
+
+            db.session.add(user)
+            db.session.flush()
+
+            patient = Patient(
+                user_id=user.id,
+                first_name=first_name,
+                last_name=last_name,
+                dob=dob,
+                gender=gender,
+                blood_group=blood_group,
+                phone=phone,
+                email=email,
+                address=address,
+                emergency_contact=emergency_contact,
+            )
+
+            db.session.add(patient)
+
+            db.session.commit()
+
+            AuditService.log(
+                action="CREATE",
+                resource="Patient",
+                resource_id=patient.id,
+            )
+
+            return patient
+
+        except Exception:
+
+            db.session.rollback()
+            raise
+
+    @staticmethod
+    def update(patient, **kwargs):
+
+        for key, value in kwargs.items():
+            setattr(patient, key, value)
+
+        db.session.commit()
+
+        AuditService.log(
+            action="UPDATE",
+            resource="Patient",
+            resource_id=patient.id,
+        )
+
+        return patient
+
+    @staticmethod
+    def delete(patient):
+
+        user = patient.user
+        patient_id = patient.id
+
+        db.session.delete(patient)
+
+        if user:
+            db.session.delete(user)
+
+        db.session.commit()
+
+        AuditService.log(
+            action="DELETE",
+            resource="Patient",
+            resource_id=patient_id,
+        )

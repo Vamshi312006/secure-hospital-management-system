@@ -3,7 +3,7 @@ from app.models.user import User
 
 def has_permission(user: User, permission_name: str) -> bool:
     """
-    Return True if the user's role contains the given permission.
+    Return True if the given user has the requested permission.
     """
 
     if user is None:
@@ -12,9 +12,7 @@ def has_permission(user: User, permission_name: str) -> bool:
     if user.role is None:
         return False
 
-    permissions = {
-        permission.name
+    return any(
+        permission.name == permission_name
         for permission in user.role.permissions
-    }
-
-    return permission_name in permissions
+    )

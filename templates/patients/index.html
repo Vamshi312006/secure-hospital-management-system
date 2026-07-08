@@ -1,0 +1,125 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Patients
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Patients</strong>
+        </span>
+
+        <h1>Patients</h1>
+
+        <p>Manage registered patients.</p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('patient.new') }}"
+            class="btn btn-primary"
+        >
+            <i data-lucide="plus"></i>
+            <span>Add Patient</span>
+        </a>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Patient Directory</h2>
+
+        <form method="GET">
+
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search patient..."
+            >
+
+        </form>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Blood Group</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for patient in patients %}
+
+                <tr>
+
+                    <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+
+                    <td>{{ patient.email }}</td>
+
+                    <td>{{ patient.phone }}</td>
+
+                    <td>{{ patient.blood_group }}</td>
+
+                    <td>
+
+                        <button class="btn btn-secondary">
+                            View
+                        </button>
+
+                        <button class="btn btn-warning">
+                            Edit
+                        </button>
+
+                        <button class="btn btn-danger">
+                            Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="5">
+                        No patients found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

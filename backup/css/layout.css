@@ -1,0 +1,95 @@
+/* ==========================================================
+   APPLICATION LAYOUT
+   ========================================================== */
+
+.app{
+
+    min-height:100vh;
+
+    display:grid;
+
+    grid-template-columns:240px 1fr;
+
+    grid-template-rows:64px 1fr;
+
+    grid-template-areas:
+        "sidebar navbar"
+        "sidebar content";
+
+}
+
+/* ==========================================================
+   NAVBAR
+   ========================================================== */
+
+.navbar{
+
+    grid-area:navbar;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+/* ==========================================================
+   SIDEBAR
+   ========================================================== */
+
+.sidebar{
+
+    grid-area:sidebar;
+
+    min-height:100vh;
+
+}
+
+/* ==========================================================
+   CONTENT
+   ========================================================== */
+
+.content{
+
+    grid-area:content;
+
+    padding:32px;
+
+    overflow:auto;
+
+}
+
+.content-wrapper{
+
+    width:100%;
+
+    max-width:1600px;
+
+    margin:0 auto;
+
+}
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width:1024px){
+
+    .app{
+
+        grid-template-columns:1fr;
+
+        grid-template-areas:
+            "navbar"
+            "content";
+
+    }
+
+    .sidebar{
+
+        display:none;
+
+    }
+
+}
