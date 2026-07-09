@@ -1,0 +1,116 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+    margin: 0;
+}
+
+.page-header p {
+    margin-top: .35rem;
+    color: var(--text-secondary);
+}
+
+.page-actions {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+}
+
+.panel {
+    margin-bottom: 1.5rem;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.panel-body {
+    overflow-x: auto;
+}
+
+.breadcrumb {
+    display: block;
+    margin-bottom: .5rem;
+    color: var(--text-secondary);
+    font-size: .875rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.medicine-row td {
+    vertical-align: middle;
+}
+
+.remove-medicine {
+    white-space: nowrap;
+}
+
+#medicine-table {
+    min-width: 900px;
+}
+
+@media (max-width: 992px) {
+
+    .page-header {
+        flex-direction: column;
+    }
+
+    .page-actions {
+        width: 100%;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    #medicine-table {
+        min-width: 760px;
+    }
+
+}

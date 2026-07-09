@@ -77,5 +77,14 @@ class Patient(db.Model):
         back_populates="patient",
     )
 
+
+    prescriptions = db.relationship(
+        "Prescription",
+        back_populates="patient",
+        cascade="all, delete-orphan",
+    )
+
+
+
     def __repr__(self):
         return f"<Patient {self.first_name} {self.last_name}>"

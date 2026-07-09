@@ -22,6 +22,10 @@ ROLE_PERMISSIONS = {
         "record:view",
         "record:create",
         "record:update",
+        "prescription:view",
+        "prescription:create",
+        "prescription:update",
+        "department:view",
     ],
 
     "Receptionist": [
@@ -32,12 +36,16 @@ ROLE_PERMISSIONS = {
         "appointment:view",
         "appointment:create",
         "appointment:update",
+        "department:view",
+        "insurance:view",
     ],
 
     "Pharmacist": [
         "patient:view",
         "record:view",
         "billing:view",
+        "prescription:view",
+        "department:view",
     ],
 
 
@@ -47,6 +55,8 @@ ROLE_PERMISSIONS = {
         "billing:update",
         "billing:delete",
         "billing:payment",
+        "insurance:view",
+        "insurance:update",
     ],
 
     "Patient": [

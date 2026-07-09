@@ -1,0 +1,232 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Prescription
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Prescriptions /
+            <strong>View</strong>
+        </span>
+
+        <h1>Prescription</h1>
+
+        <p>
+            View prescription details.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('prescription.edit', prescription_id=prescription.id) }}"
+            class="btn btn-warning"
+        >
+            Edit
+        </a>
+
+        <a
+            href="{{ url_for('prescription.index') }}"
+            class="btn btn-secondary"
+        >
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Prescription Information</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <tbody>
+
+                <tr>
+                    <th>ID</th>
+                    <td>#{{ prescription.id }}</td>
+                </tr>
+
+                <tr>
+                    <th>Patient</th>
+                    <td>
+                        {{ prescription.patient.first_name }}
+                        {{ prescription.patient.last_name }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Doctor</th>
+                    <td>
+                        Dr.
+                        {{ prescription.doctor.user.username }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Medical Record</th>
+                    <td>
+                        #{{ prescription.record.id }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Date</th>
+                    <td>
+                        {{ prescription.prescription_date.strftime("%d %b %Y") }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Instructions</th>
+                    <td>
+                        {{ prescription.instructions or "-" }}
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Medicines</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Medicine</th>
+
+                    <th>Quantity</th>
+
+                    <th>M</th>
+
+                    <th>A</th>
+
+                    <th>N</th>
+
+                    <th>Days</th>
+
+                    <th>Notes</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for item in prescription.items %}
+
+                <tr>
+
+                    <td>
+
+                        {{ item.medicine.name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.quantity }}
+
+                    </td>
+
+                    <td>
+
+                        {% if item.morning %}
+                        ✓
+                        {% else %}
+                        —
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if item.afternoon %}
+                        ✓
+                        {% else %}
+                        —
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if item.night %}
+                        ✓
+                        {% else %}
+                        —
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.days }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.notes or "-" }}
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="7">
+
+                        No medicines added.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

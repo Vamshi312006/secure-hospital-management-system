@@ -16,6 +16,8 @@ from .payment import Payment
 
 # Clinical dependencies
 from .medicine import Medicine
+from .insurance import Insurance
+from .setting import Setting
 from .prescription import Prescription
 from .prescription_item import PrescriptionItem
 
@@ -23,3 +25,23 @@ from .prescription_item import PrescriptionItem
 from .audit_log import AuditLog
 from .session import Session
 from .login_attempt import LoginAttempt
+
+
+__all__ = [
+    "Role",
+    "Permission",
+    "User",
+    "Department",
+    "Doctor",
+    "Patient",
+    "Appointment",
+    "PatientRecord",
+    "Medicine",
+    "Prescription",
+    "PrescriptionItem",
+    "Invoice",
+    "Payment",
+    "AuditLog",
+    "Insurance",
+    "Setting",
+]

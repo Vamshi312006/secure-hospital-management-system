@@ -1,0 +1,531 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{{ "Edit Prescription" if edit_mode else "New Prescription" }}
+{% endblock %}
+
+{% block page_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/pages/prescriptions.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Prescriptions /
+            <strong>{{ "Edit" if edit_mode else "New" }}</strong>
+        </span>
+
+        <h1>
+            {{ "Edit Prescription" if edit_mode else "New Prescription" }}
+        </h1>
+
+        <p>
+            Create and manage patient prescriptions.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('prescription.index') }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </div>
+
+</div>
+
+<form
+    method="POST"
+    action="{% if edit_mode %}{{ url_for('prescription.update', prescription_id=prescription.id) }}{% else %}{{ url_for('prescription.create') }}{% endif %}"
+    class="form"
+>
+
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+
+<div class="panel">
+
+<div class="panel-header">
+<h2>Prescription Details</h2>
+</div>
+
+<div class="panel-body">
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="form-label">
+
+Patient
+
+</label>
+
+<select
+    class="form-control"
+    name="patient_id"
+    required
+>
+
+<option value="">Select Patient</option>
+
+{% for patient in patients %}
+
+<option
+    value="{{ patient.id }}"
+    {% if edit_mode and prescription.patient_id==patient.id %}selected{% endif %}
+>
+
+{{ patient.first_name }}
+{{ patient.last_name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Doctor
+
+</label>
+
+<select
+    class="form-control"
+    name="doctor_id"
+    required
+>
+
+<option value="">Select Doctor</option>
+
+{% for doctor in doctors %}
+
+<option
+    value="{{ doctor.id }}"
+    {% if edit_mode and prescription.doctor_id==doctor.id %}selected{% endif %}
+>
+
+{{ doctor.user.username }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Medical Record
+
+</label>
+
+<select
+    class="form-control"
+    name="record_id"
+    required
+>
+
+<option value="">Select Record</option>
+
+{% for record in records %}
+
+<option
+    value="{{ record.id }}"
+    {% if edit_mode and prescription.record_id==record.id %}selected{% endif %}
+>
+
+#{{ record.id }}
+
+-
+
+{{ record.patient.first_name }}
+
+{{ record.patient.last_name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+General Instructions
+
+</label>
+
+<textarea
+    class="form-control"
+    name="instructions"
+    rows="4"
+>{{ prescription.instructions if edit_mode else "" }}</textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>Medicines</h2>
+
+        <button
+            type="button"
+            id="add-medicine"
+            class="btn btn-primary"
+        >
+            <i data-lucide="plus"></i>
+            Add Medicine
+        </button>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table
+            class="table"
+            id="medicine-table"
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>Medicine</th>
+
+                    <th>Quantity</th>
+
+                    <th>Morning</th>
+
+                    <th>Afternoon</th>
+
+                    <th>Night</th>
+
+                    <th>Days</th>
+
+                    <th>Notes</th>
+
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="medicine-body">
+
+{% if edit_mode %}
+
+{% for item in prescription.items %}
+
+<tr class="medicine-row">
+
+<td>
+
+<select
+    class="form-control"
+    name="medicine_id"
+    required
+>
+
+{% for medicine in medicines %}
+
+<option
+    value="{{ medicine.id }}"
+    {% if medicine.id == item.medicine_id %}selected{% endif %}
+>
+
+{{ medicine.name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</td>
+
+<td>
+
+<input
+    class="form-control"
+    type="text"
+    name="quantity"
+    value="{{ item.quantity }}"
+    required
+>
+
+</td>
+
+<td class="text-center">
+
+<input
+    type="checkbox"
+    name="morning"
+    value="{{ loop.index0 }}"
+    {% if item.morning %}checked{% endif %}
+>
+
+</td>
+
+<td class="text-center">
+
+<input
+    type="checkbox"
+    name="afternoon"
+    value="{{ loop.index0 }}"
+    {% if item.afternoon %}checked{% endif %}
+>
+
+</td>
+
+<td class="text-center">
+
+<input
+    type="checkbox"
+    name="night"
+    value="{{ loop.index0 }}"
+    {% if item.night %}checked{% endif %}
+>
+
+</td>
+
+<td>
+
+<input
+    class="form-control"
+    type="number"
+    min="1"
+    name="days"
+    value="{{ item.days }}"
+    required
+>
+
+</td>
+
+<td>
+
+<input
+    class="form-control"
+    type="text"
+    name="notes"
+    value="{{ item.notes or '' }}"
+>
+
+</td>
+
+<td>
+
+<button
+    type="button"
+    class="btn btn-danger remove-medicine"
+>
+
+<i data-lucide="trash-2"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+{% else %}
+
+<tr class="medicine-row">
+
+<td>
+
+<select
+    class="form-control"
+    name="medicine_id"
+    required
+>
+
+<option value="">
+Select Medicine
+</option>
+
+{% for medicine in medicines %}
+
+<option value="{{ medicine.id }}">
+
+{{ medicine.name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</td>
+
+<td>
+
+<input
+    class="form-control"
+    type="text"
+    name="quantity"
+    required
+>
+
+</td>
+
+<td class="text-center">
+
+<input
+    type="checkbox"
+    name="morning"
+    value="0"
+>
+
+</td>
+
+<td class="text-center">
+
+<input
+    type="checkbox"
+    name="afternoon"
+    value="0"
+>
+
+</td>
+
+<td class="text-center">
+
+<input
+    type="checkbox"
+    name="night"
+    value="0"
+>
+
+</td>
+
+<td>
+
+<input
+    class="form-control"
+    type="number"
+    min="1"
+    name="days"
+    value="1"
+    required
+>
+
+</td>
+
+<td>
+
+<input
+    class="form-control"
+    type="text"
+    name="notes"
+>
+
+</td>
+
+<td>
+
+<button
+    type="button"
+    class="btn btn-danger remove-medicine"
+>
+
+<i data-lucide="trash-2"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+{% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<br>
+
+
+<div class="page-actions">
+
+    <a
+        href="{{ url_for('prescription.index') }}"
+        class="btn btn-secondary"
+    >
+        Cancel
+    </a>
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+
+        {% if edit_mode %}
+
+            Update Prescription
+
+        {% else %}
+
+            Save Prescription
+
+        {% endif %}
+
+    </button>
+
+</div>
+
+</form>
+
+{% endblock %}
+
+{% block page_js %}
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/modules/prescriptions.js'
+    ) }}"
+></script>
+
+{% endblock %}

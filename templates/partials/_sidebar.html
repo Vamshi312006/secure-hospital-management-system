@@ -31,6 +31,22 @@
                 <span>Doctors</span>
             </a>
 
+            <a
+                href="{{ url_for('department.index') }}"
+                class="sidebar__item {{ "active" if request.endpoint.startswith("department.") else "" }}"
+            >
+                <i data-lucide="building-2"></i>
+                <span>Departments</span>
+            </a>
+
+            <a
+                href="{{ url_for('insurance.index') }}"
+                class="sidebar__item {{ "active" if request.endpoint.startswith("insurance.") else "" }}"
+            >
+                <i data-lucide="shield-check"></i>
+                <span>Insurance</span>
+            </a>
+
             <a href="{{ url_for('appointment.index') }}" class="sidebar__item {{ "active" if request.endpoint == "appointment.index" else "" }}">
                 <i data-lucide="calendar-days"></i>
                 <span>Appointments</span>
@@ -41,12 +57,25 @@
                 <span>Medical Records</span>
             </a>
 
-            <a href="#" class="sidebar__item">
+            <a
+                href="{{ url_for('prescription.index') }}"
+                class="sidebar__item {{ "active" if request.endpoint.startswith("prescription.") else "" }}"
+            >
                 <i data-lucide="pill"></i>
-                <span>Pharmacy</span>
+                <span>Prescriptions</span>
             </a>
 
-            <a href="#" class="sidebar__item">
+
+
+            <a
+                href="{{ url_for('medicine.index') }}"
+                class="sidebar__item {{ "active" if request.endpoint.startswith("medicine.") else "" }}"
+            >
+                <i data-lucide="capsules"></i>
+                <span>Medicines</span>
+            </a>
+
+            <a href="{{ url_for('billing.index') }}" class="sidebar__item {{ "active" if request.endpoint.startswith("billing.") else "" }}">
                 <i data-lucide="credit-card"></i>
                 <span>Billing</span>
             </a>
@@ -59,7 +88,10 @@
                 Administration
             </span>
 
-            <a href="#" class="sidebar__item">
+            <a
+                href="{{ url_for('security.index') }}"
+                class="sidebar__item {{ "active" if request.endpoint.startswith("security.") else "" }}"
+            >
                 <i data-lucide="shield-alert"></i>
                 <span>Security</span>
             </a>
@@ -69,7 +101,10 @@
                 <span>Audit Logs</span>
             </a>
 
-            <a href="#" class="sidebar__item">
+            <a
+                href="{{ url_for('setting.index') }}"
+                class="sidebar__item {{ "active" if request.endpoint.startswith("setting.") else "" }}"
+            >
                 <i data-lucide="settings"></i>
                 <span>Settings</span>
             </a>

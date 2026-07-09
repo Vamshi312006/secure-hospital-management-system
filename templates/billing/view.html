@@ -4,38 +4,109 @@
 
 {% block content %}
 
-<h1>{{ invoice.invoice_number }}</h1>
+<div class="page-header">
 
-<p><strong>Patient:</strong>
-{{ invoice.patient.first_name }}
-{{ invoice.patient.last_name }}</p>
+    <div>
 
-<p><strong>Status:</strong>
-{{ invoice.status }}</p>
+        <h1>
+            {{ invoice.invoice_number }}
+        </h1>
 
-<hr>
+        <p>
+            {{ invoice.patient.first_name }}
+            {{ invoice.patient.last_name }}
+        </p>
 
-<h2>Summary</h2>
+    </div>
 
-<ul>
+    <span class="badge">
+        {{ invoice.status }}
+    </span>
 
-<li>Subtotal : ₹ {{ invoice.subtotal }}</li>
+</div>
 
-<li>Tax : ₹ {{ invoice.tax }}</li>
+<div class="grid grid-3">
 
-<li>Discount : ₹ {{ invoice.discount }}</li>
+    <div class="card">
+        <h3>Total</h3>
+        <h2>₹ {{ invoice.total }}</h2>
+    </div>
 
-<li>Total : ₹ {{ invoice.total }}</li>
+    <div class="card">
+        <h3>Paid</h3>
+        <h2>₹ {{ invoice.amount_paid }}</h2>
+    </div>
 
-<li>Paid : ₹ {{ invoice.amount_paid }}</li>
+    <div class="card">
+        <h3>Balance</h3>
+        <h2>₹ {{ invoice.balance }}</h2>
+    </div>
 
-<li>Balance : ₹ {{ invoice.balance }}</li>
+</div>
 
-</ul>
+<div class="panel">
 
-<h2>Items</h2>
+<h2>Add Invoice Item</h2>
 
-<table>
+<form
+    method="POST"
+    action="{{ url_for('billing.add_item', invoice_id=invoice.id) }}"
+>
+
+<input
+type="hidden"
+name="csrf_token"
+value="{{ csrf_token() }}"
+>
+
+
+<input
+    type="text"
+    name="category"
+    placeholder="Category"
+    required
+>
+
+<input
+    type="text"
+    name="description"
+    placeholder="Description"
+    required
+>
+
+<input
+    type="number"
+    name="quantity"
+    value="1"
+    min="1"
+    required
+>
+
+<input
+    type="number"
+    step="0.01"
+    name="unit_price"
+    placeholder="Unit Price"
+    required
+>
+
+<button
+    class="btn btn-primary"
+>
+    Add Item
+</button>
+
+</form>
+
+</div>
+
+<div class="panel">
+
+<h2>Invoice Items</h2>
+
+<table class="table">
+
+<thead>
 
 <tr>
 
@@ -49,7 +120,13 @@
 
 <th>Total</th>
 
+<th></th>
+
 </tr>
+
+</thead>
+
+<tbody>
 
 {% for item in invoice.items %}
 
@@ -61,14 +138,159 @@
 
 <td>{{ item.quantity }}</td>
 
-<td>{{ item.unit_price }}</td>
+<td>₹ {{ item.unit_price }}</td>
 
-<td>{{ item.total }}</td>
+<td>₹ {{ item.total }}</td>
+
+<td>
+
+<form
+method="POST"
+action="{{ url_for('billing.delete_item', item_id=item.id) }}"
+>
+
+<input
+type="hidden"
+name="csrf_token"
+value="{{ csrf_token() }}"
+>
+
+
+<button class="btn btn-danger btn-sm">
+
+Delete
+
+</button>
+
+</form>
+
+</td>
 
 </tr>
 
 {% endfor %}
 
+</tbody>
+
 </table>
+
+</div>
+
+<div class="panel">
+
+<h2>Receive Payment</h2>
+
+<form
+method="POST"
+action="{{ url_for('billing.payment', invoice_id=invoice.id) }}"
+>
+
+<input
+type="hidden"
+name="csrf_token"
+value="{{ csrf_token() }}"
+>
+
+
+<input
+type="number"
+step="0.01"
+name="amount"
+placeholder="Amount"
+required
+>
+
+<select name="method">
+
+<option>Cash</option>
+
+<option>Card</option>
+
+<option>UPI</option>
+
+<option>Bank Transfer</option>
+
+</select>
+
+<input
+type="text"
+name="reference_number"
+placeholder="Reference Number"
+>
+
+<textarea
+name="remarks"
+placeholder="Remarks"
+></textarea>
+
+<button
+class="btn btn-success"
+>
+
+Receive Payment
+
+</button>
+
+</form>
+
+</div>
+
+<div class="panel">
+
+<h2>Payment History</h2>
+
+<table class="table">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Amount</th>
+
+<th>Method</th>
+
+<th>Reference</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for payment in invoice.payments %}
+
+<tr>
+
+<td>{{ payment.paid_at }}</td>
+
+<td>₹ {{ payment.amount }}</td>
+
+<td>{{ payment.method }}</td>
+
+<td>{{ payment.reference_number }}</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="4">
+
+No payments recorded.
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
 
 {% endblock %}

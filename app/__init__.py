@@ -27,9 +27,15 @@ from app.routes import (
     dev_bp,
     patient_bp,
     doctor_bp,
+    department_bp,
+    insurance_bp,
+    setting_bp,
+    security_bp,
     appointment_bp,
     record_bp,
     billing_bp,
+    medicine_bp,
+    prescription_bp,
     audit_bp,
 )
 
@@ -106,9 +112,15 @@ def create_app():
     app.register_blueprint(dev_bp)
     app.register_blueprint(patient_bp)
     app.register_blueprint(doctor_bp)
+    app.register_blueprint(department_bp)
+    app.register_blueprint(insurance_bp)
+    app.register_blueprint(setting_bp)
+    app.register_blueprint(security_bp)
     app.register_blueprint(appointment_bp)
     app.register_blueprint(record_bp)
     app.register_blueprint(billing_bp)
+    app.register_blueprint(medicine_bp)
+    app.register_blueprint(prescription_bp)
     app.register_blueprint(audit_bp)
 
     return app

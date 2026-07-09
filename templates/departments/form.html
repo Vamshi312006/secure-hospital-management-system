@@ -1,0 +1,143 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{{ "Edit Department" if edit_mode else "New Department" }}
+{% endblock %}
+
+{% block page_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/pages/departments.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Departments /
+            <strong>{{ "Edit" if edit_mode else "New" }}</strong>
+        </span>
+
+        <h1>
+            {{ "Edit Department" if edit_mode else "New Department" }}
+        </h1>
+
+        <p>
+            Manage hospital departments.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('department.index') }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </div>
+
+</div>
+
+<form
+    method="POST"
+    action="{% if edit_mode %}{{ url_for('department.update', department_id=department.id) }}{% else %}{{ url_for('department.create') }}{% endif %}"
+>
+
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+
+<div class="panel">
+
+<div class="panel-header">
+
+<h2>
+
+Department Information
+
+</h2>
+
+</div>
+
+<div class="panel-body">
+
+<div class="form-group">
+
+<label class="form-label">
+
+Department Name
+
+</label>
+
+<input
+    class="form-control"
+    type="text"
+    name="name"
+    required
+    value="{{ department.name if edit_mode else '' }}"
+>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Description
+
+</label>
+
+<textarea
+    class="form-control"
+    rows="5"
+    name="description"
+>{{ department.description if edit_mode else '' }}</textarea>
+
+</div>
+
+
+</div>
+
+</div>
+
+<div class="page-actions">
+
+    <a
+        href="{{ url_for('department.index') }}"
+        class="btn btn-secondary"
+    >
+        Cancel
+    </a>
+
+    <button
+        class="btn btn-primary"
+        type="submit"
+    >
+
+        {% if edit_mode %}
+
+            Update Department
+
+        {% else %}
+
+            Save Department
+
+        {% endif %}
+
+    </button>
+
+</div>
+
+</form>
+
+{% endblock %}

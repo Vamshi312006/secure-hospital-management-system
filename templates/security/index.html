@@ -1,0 +1,183 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Security Center{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/pages/security.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Security Center</strong>
+        </span>
+
+        <h1>Security Center</h1>
+
+        <p>
+            Security overview and monitoring.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<h3>Active Sessions</h3>
+<h2>{{ active_sessions }}</h2>
+</div>
+
+<div class="stat-card">
+<h3>Failed Logins</h3>
+<h2>{{ failed_logins }}</h2>
+</div>
+
+<div class="stat-card">
+<h3>Successful Logins</h3>
+<h2>{{ successful_logins }}</h2>
+</div>
+
+<div class="stat-card">
+<h3>Audit Events</h3>
+<h2>{{ audit_events }}</h2>
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-header">
+
+<h2>
+
+Recent Login Attempts
+
+</h2>
+
+</div>
+
+<div class="panel-body">
+
+<table class="table">
+
+<thead>
+
+<tr>
+
+<th>User</th>
+<th>IP</th>
+<th>Status</th>
+<th>Time</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for item in recent_logins %}
+
+<tr>
+
+<td>{{ item.username }}</td>
+<td>{{ item.ip_address }}</td>
+<td>{{ item.status }}</td>
+<td>{{ item.timestamp }}</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="4">
+
+No login activity.
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-header">
+
+<h2>
+
+Recent Audit Events
+
+</h2>
+
+</div>
+
+<div class="panel-body">
+
+<table class="table">
+
+<thead>
+
+<tr>
+
+<th>User</th>
+<th>Action</th>
+<th>Resource</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for item in recent_audit %}
+
+<tr>
+
+<td>{{ item.user.username if item.user else "-" }}</td>
+<td>{{ item.action }}</td>
+<td>{{ item.resource }}</td>
+<td>{{ item.status }}</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="4">
+
+No audit events.
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

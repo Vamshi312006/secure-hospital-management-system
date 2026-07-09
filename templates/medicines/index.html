@@ -1,0 +1,184 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Medicines
+{% endblock %}
+
+{% block page_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/pages/medicines.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Medicines</strong>
+        </span>
+
+        <h1>Medicine Catalog</h1>
+
+        <p>
+            Manage medicines available for prescriptions.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('medicine.new') }}"
+            class="btn btn-primary"
+        >
+            <i data-lucide="plus"></i>
+
+            Add Medicine
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <form
+            method="GET"
+        >
+
+            <input
+                class="form-control"
+                type="search"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search medicines..."
+            >
+
+        </form>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Manufacturer</th>
+
+                    <th>Dosage</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for medicine in medicines %}
+
+                <tr>
+
+                    <td>
+
+                        {{ medicine.name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ medicine.manufacturer or "-" }}
+
+                    </td>
+
+                    <td>
+
+                        {{ medicine.dosage or "-" }}
+
+                    </td>
+
+                    <td>
+
+                        <div class="page-actions">
+
+                            <a
+                                class="btn btn-secondary btn-sm"
+                                href="{{ url_for('medicine.view', medicine_id=medicine.id) }}"
+                            >
+                                View
+                            </a>
+
+                            <a
+                                class="btn btn-warning btn-sm"
+                                href="{{ url_for('medicine.edit', medicine_id=medicine.id) }}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('medicine.delete', medicine_id=medicine.id) }}"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    type="submit"
+                                    onclick="return confirm('Delete this medicine?');"
+                                >
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="table-empty"
+                    >
+
+                        No medicines found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

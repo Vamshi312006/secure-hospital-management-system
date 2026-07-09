@@ -1,0 +1,52 @@
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:1rem;
+    margin-bottom:1.5rem;
+}
+
+.page-actions{
+    display:flex;
+    gap:.75rem;
+    align-items:center;
+}
+
+.breadcrumb{
+    display:block;
+    margin-bottom:.5rem;
+    color:var(--text-secondary);
+    font-size:.875rem;
+}
+
+.form-group{
+    margin-bottom:1rem;
+}
+
+.form-label{
+    display:block;
+    margin-bottom:.5rem;
+    font-weight:600;
+}
+
+textarea.form-control{
+    resize:vertical;
+    min-height:120px;
+}
+
+.table th{
+    width:220px;
+}
+
+@media (max-width:768px){
+
+.page-header{
+    flex-direction:column;
+}
+
+.page-actions{
+    width:100%;
+    flex-wrap:wrap;
+}
+
+}

@@ -1,0 +1,121 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Department
+{% endblock %}
+
+{% block page_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/pages/departments.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Departments /
+            <strong>View</strong>
+        </span>
+
+        <h1>{{ department.name }}</h1>
+
+        <p>
+            Department details.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('department.edit', department_id=department.id) }}"
+            class="btn btn-warning"
+        >
+            Edit
+        </a>
+
+        <a
+            href="{{ url_for('department.index') }}"
+            class="btn btn-secondary"
+        >
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <h2>General Information</h2>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <tbody>
+
+                <tr>
+                    <th>ID</th>
+                    <td>{{ department.id }}</td>
+                </tr>
+
+                <tr>
+                    <th>Name</th>
+                    <td>{{ department.name }}</td>
+                </tr>
+
+                <tr>
+                    <th>Description</th>
+                    <td>{{ department.description or "-" }}</td>
+                </tr>
+
+                <tr>
+                    <th>Doctors</th>
+                    <td>{{ department.doctors|length }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div class="page-actions">
+
+    <form
+        method="POST"
+        action="{{ url_for('department.delete', department_id=department.id) }}"
+    >
+
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+        >
+
+        <button
+            class="btn btn-danger"
+            type="submit"
+            onclick="return confirm('Delete this department?');"
+        >
+            Delete Department
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

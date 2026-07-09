@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Insurance{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/pages/insurance.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+<h1>{{ insurance.provider }}</h1>
+
+<div class="page-actions">
+
+<a
+href="{{ url_for('insurance.edit', insurance_id=insurance.id) }}"
+class="btn btn-warning"
+>
+
+Edit
+
+</a>
+
+<a
+href="{{ url_for('insurance.index') }}"
+class="btn btn-secondary"
+>
+
+Back
+
+</a>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-body">
+
+<table class="table">
+
+<tr><th>Provider</th><td>{{ insurance.provider }}</td></tr>
+<tr><th>Policy</th><td>{{ insurance.policy_number }}</td></tr>
+<tr><th>Coverage</th><td>{{ insurance.coverage_type or "-" }}</td></tr>
+<tr><th>Phone</th><td>{{ insurance.contact_number or "-" }}</td></tr>
+<tr><th>Email</th><td>{{ insurance.email or "-" }}</td></tr>
+
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

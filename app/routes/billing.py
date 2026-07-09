@@ -13,6 +13,9 @@ from app.routes.auth import login_required
 from app.security.decorators import permission_required
 
 from app.services.invoice_service import InvoiceService
+from app.extensions import db
+from app.models.patient import Patient
+from app.models.invoice_item import InvoiceItem
 
 
 billing_bp = Blueprint(
@@ -49,8 +52,18 @@ def index():
 @permission_required("billing:create")
 def new():
 
+    patients = (
+        Patient.query
+        .order_by(
+            Patient.first_name,
+            Patient.last_name,
+        )
+        .all()
+    )
+
     return render_template(
         "billing/form.html",
+        patients=patients,
     )
 
 
@@ -120,9 +133,19 @@ def edit(invoice_id):
     if invoice is None:
         abort(404)
 
+    patients = (
+        Patient.query
+        .order_by(
+            Patient.first_name,
+            Patient.last_name,
+        )
+        .all()
+    )
+
     return render_template(
         "billing/edit.html",
         invoice=invoice,
+        patients=patients,
     )
 
 
@@ -237,4 +260,128 @@ def payment(invoice_id):
             "billing.view",
             invoice_id=invoice.id,
         )
+    )
+
+
+@billing_bp.route(
+    "/<int:invoice_id>/item",
+    methods=["POST"],
+)
+@login_required
+@permission_required("billing:update")
+def add_item(invoice_id):
+
+    invoice = InvoiceService.get_by_id(
+        invoice_id,
+    )
+
+    if invoice is None:
+        abort(404)
+
+    try:
+
+        InvoiceService.add_item(
+            invoice,
+            request.form,
+        )
+
+        flash(
+            "Invoice item added.",
+            "success",
+        )
+
+    except Exception as e:
+
+        flash(
+            str(e),
+            "danger",
+        )
+
+    return redirect(
+        url_for(
+            "billing.view",
+            invoice_id=invoice.id,
+        )
+    )
+
+
+@billing_bp.route(
+    "/item/<int:item_id>/delete",
+    methods=["POST"],
+)
+@login_required
+@permission_required("billing:update")
+def delete_item(item_id):
+
+    item = db.session.get(
+        InvoiceItem,
+        item_id,
+    )
+
+    if item is None:
+        abort(404)
+
+    invoice_id = item.invoice_id
+
+    try:
+
+        InvoiceService.remove_item(
+            item,
+        )
+
+        flash(
+            "Invoice item removed.",
+            "success",
+        )
+
+    except Exception as e:
+
+        flash(
+            str(e),
+            "danger",
+        )
+
+    return redirect(
+        url_for(
+            "billing.view",
+            invoice_id=invoice_id,
+        )
+    )
+
+
+@billing_bp.route(
+    "/<int:invoice_id>/delete",
+    methods=["POST"],
+)
+@login_required
+@permission_required("billing:delete")
+def delete(invoice_id):
+
+    invoice = InvoiceService.get_by_id(
+        invoice_id,
+    )
+
+    if invoice is None:
+        abort(404)
+
+    try:
+
+        InvoiceService.delete_invoice(
+            invoice,
+        )
+
+        flash(
+            "Invoice deleted successfully.",
+            "success",
+        )
+
+    except Exception as e:
+
+        flash(
+            str(e),
+            "danger",
+        )
+
+    return redirect(
+        url_for("billing.index")
     )

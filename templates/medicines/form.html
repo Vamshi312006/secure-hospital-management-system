@@ -1,0 +1,183 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{{ "Edit Medicine" if edit_mode else "New Medicine" }}
+{% endblock %}
+
+{% block page_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/pages/medicines.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            Medicines /
+            <strong>
+                {{ "Edit" if edit_mode else "New" }}
+            </strong>
+        </span>
+
+        <h1>
+            {{ "Edit Medicine" if edit_mode else "New Medicine" }}
+        </h1>
+
+        <p>
+            Maintain the medicine catalog used for prescriptions.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('medicine.index') }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </div>
+
+</div>
+
+<form
+    method="POST"
+    action="{% if edit_mode %}{{ url_for('medicine.update', medicine_id=medicine.id) }}{% else %}{{ url_for('medicine.create') }}{% endif %}"
+>
+
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+
+<div class="panel">
+
+<div class="panel-header">
+
+<h2>
+
+Medicine Information
+
+</h2>
+
+</div>
+
+<div class="panel-body">
+
+<div class="form-group">
+
+<label class="form-label">
+
+Medicine Name
+
+</label>
+
+<input
+    class="form-control"
+    type="text"
+    name="name"
+    required
+    value="{{ medicine.name if edit_mode else '' }}"
+>
+
+</div>
+
+<div class="form-row">
+
+<div class="form-group">
+
+<label class="form-label">
+
+Manufacturer
+
+</label>
+
+<input
+    class="form-control"
+    type="text"
+    name="manufacturer"
+    value="{{ medicine.manufacturer if edit_mode else '' }}"
+>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Dosage
+
+</label>
+
+<input
+    class="form-control"
+    type="text"
+    name="dosage"
+    value="{{ medicine.dosage if edit_mode else '' }}"
+>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label class="form-label">
+
+Description
+
+</label>
+
+<textarea
+    class="form-control"
+    rows="5"
+    name="description"
+>{{ medicine.description if edit_mode else '' }}</textarea>
+
+</div>
+
+
+</div>
+
+</div>
+
+<div class="page-actions">
+
+    <a
+        href="{{ url_for('medicine.index') }}"
+        class="btn btn-secondary"
+    >
+        Cancel
+    </a>
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+
+        {% if edit_mode %}
+
+            Update Medicine
+
+        {% else %}
+
+            Save Medicine
+
+        {% endif %}
+
+    </button>
+
+</div>
+
+</form>
+
+{% endblock %}

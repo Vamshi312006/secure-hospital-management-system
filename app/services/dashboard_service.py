@@ -8,6 +8,8 @@ from app.models.appointment import Appointment
 from app.models.session import Session
 from app.models.login_attempt import LoginAttempt
 from app.models.audit_log import AuditLog
+from app.models.invoice import Invoice
+from app.models.payment import Payment
 
 
 class DashboardService:
@@ -100,6 +102,34 @@ class DashboardService:
             .all()
         )
 
+
+        invoice_count = (
+            db.session.query(Invoice)
+            .count()
+        )
+
+        paid_invoices = (
+            db.session.query(Invoice)
+            .filter(
+                Invoice.status == "Paid"
+            )
+            .count()
+        )
+
+        pending_invoices = (
+            db.session.query(Invoice)
+            .filter(
+                Invoice.status == "Pending"
+            )
+            .count()
+        )
+
+        today_revenue = sum(
+            p.amount
+            for p in Payment.query.all()
+            if p.paid_at.date() == date.today()
+        )
+
         return {
 
             "patient_count": patient_count,
@@ -129,6 +159,14 @@ class DashboardService:
             "recent_login_attempts": recent_login_attempts,
 
             "recent_appointments": recent_appointments,
+
+            "invoice_count": invoice_count,
+
+            "paid_invoices": paid_invoices,
+
+            "pending_invoices": pending_invoices,
+
+            "today_revenue": today_revenue,
 
         }
 

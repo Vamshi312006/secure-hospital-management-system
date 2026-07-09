@@ -1,0 +1,158 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Departments{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/pages/departments.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Departments</strong>
+        </span>
+
+        <h1>Departments</h1>
+
+        <p>
+            Manage hospital departments.
+        </p>
+
+    </div>
+
+    <div class="page-actions">
+
+        <a
+            href="{{ url_for('department.new') }}"
+            class="btn btn-primary"
+        >
+            <i data-lucide="plus"></i>
+            New Department
+        </a>
+
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <div class="panel-header">
+
+        <form method="GET">
+
+            <input
+                class="form-control"
+                type="search"
+                name="q"
+                value="{{ query }}"
+                placeholder="Search departments..."
+            >
+
+        </form>
+
+    </div>
+
+    <div class="panel-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Doctors</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for department in departments %}
+
+                <tr>
+
+                    <td>{{ department.name }}</td>
+
+                    <td>{{ department.description or "-" }}</td>
+
+                    <td>{{ department.doctors|length }}</td>
+
+                    <td>
+
+                        <div class="page-actions">
+
+                            <a
+                                class="btn btn-secondary btn-sm"
+                                href="{{ url_for('department.view', department_id=department.id) }}"
+                            >
+                                View
+                            </a>
+
+                            <a
+                                class="btn btn-warning btn-sm"
+                                href="{{ url_for('department.edit', department_id=department.id) }}"
+                            >
+                                Edit
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('department.delete', department_id=department.id) }}"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    type="submit"
+                                    onclick="return confirm('Delete this department?');"
+                                >
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="table-empty"
+                    >
+                        No departments available.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

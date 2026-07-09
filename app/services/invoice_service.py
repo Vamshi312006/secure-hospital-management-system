@@ -353,3 +353,64 @@ class InvoiceService:
             )
 
         return total
+
+    @staticmethod
+    def payment_history(invoice):
+
+        return (
+            Payment.query
+            .filter_by(
+                invoice_id=invoice.id,
+            )
+            .order_by(
+                Payment.paid_at.desc(),
+            )
+            .all()
+        )
+
+
+    @staticmethod
+    def dashboard_stats():
+
+        invoices = Invoice.query.count()
+
+        pending = (
+            Invoice.query
+            .filter(
+                Invoice.status == "Pending"
+            )
+            .count()
+        )
+
+        paid = (
+            Invoice.query
+            .filter(
+                Invoice.status == "Paid"
+            )
+            .count()
+        )
+
+        recent_payments = (
+            Payment.query
+            .order_by(
+                Payment.paid_at.desc()
+            )
+            .limit(10)
+            .all()
+        )
+
+        return {
+
+            "invoice_count": invoices,
+
+            "pending_invoices": pending,
+
+            "paid_invoices": paid,
+
+            "today_revenue": InvoiceService.revenue_today(),
+
+            "outstanding_balance": InvoiceService.outstanding_balance(),
+
+            "recent_payments": recent_payments,
+
+        }

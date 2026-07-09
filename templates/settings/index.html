@@ -1,0 +1,137 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/pages/settings.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <span class="breadcrumb">
+            Home /
+            <strong>Settings</strong>
+        </span>
+
+        <h1>System Settings</h1>
+
+        <p>
+            Configure hospital information.
+        </p>
+
+    </div>
+
+</div>
+
+<form
+    method="POST"
+    action="{{ url_for('setting.index') }}"
+>
+
+<input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+>
+
+<div class="panel">
+
+<div class="panel-header">
+
+<h2>
+
+Hospital Information
+
+</h2>
+
+</div>
+
+<div class="panel-body">
+
+<div class="form-group">
+
+<label>Hospital Name</label>
+
+<input
+class="form-control"
+name="hospital_name"
+value="{{ setting.hospital_name }}"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<label>Address</label>
+
+<textarea
+class="form-control"
+rows="4"
+name="hospital_address"
+>{{ setting.hospital_address or "" }}</textarea>
+
+</div>
+
+<div class="form-group">
+
+<label>Phone</label>
+
+<input
+class="form-control"
+name="hospital_phone"
+value="{{ setting.hospital_phone or "" }}"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+class="form-control"
+type="email"
+name="hospital_email"
+value="{{ setting.hospital_email or "" }}"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>Timezone</label>
+
+<input
+class="form-control"
+name="timezone"
+value="{{ setting.timezone }}"
+>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="page-actions">
+
+<button
+class="btn btn-primary"
+type="submit"
+>
+
+Save Settings
+
+</button>
+
+</div>
+
+</form>
+
+{% endblock %}

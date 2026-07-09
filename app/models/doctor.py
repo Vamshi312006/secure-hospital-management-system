@@ -74,5 +74,12 @@ class Doctor(db.Model):
         back_populates="doctor",
     )
 
+
+    prescriptions = db.relationship(
+        "Prescription",
+        back_populates="doctor",
+    )
+
+
     def __repr__(self):
         return f"<Doctor {self.license_number}>"

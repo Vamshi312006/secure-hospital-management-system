@@ -1,37 +1,41 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
+*$py.class
 
-# Virtual environments
+# Virtual Environments
 venv/
 .venv/
 env/
-ENV/
 
-# Environment and secrets
+# Environment
 .env
 .env.*
-!.env.example
 
-# Flask
-instance/
-*.log
+# IDE
+.vscode/
+.idea/
 
-# OS and editor files
+# Operating System
 .DS_Store
 Thumbs.db
-.idea/
-.vscode/
 
-# Local reports and presentation artifacts
-*.pdf
-*.pptx
-venv/
-__pycache__/
-*.pyc
-.env
+# Logs
+*.log
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# SQLite
+*.sqlite3
+
+# Temporary files
+*.swp
+*.swo
