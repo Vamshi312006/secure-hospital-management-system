@@ -18,7 +18,7 @@ class Config:
 
     SESSION_COOKIE_SAMESITE = "Lax"
 
-    SESSION_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = os.getenv("FLASK_DEBUG", "0") != "1"
 
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
 
